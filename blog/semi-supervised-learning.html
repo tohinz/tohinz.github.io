@@ -1,0 +1,678 @@
+<!DOCTYPE HTML>
+<!--
+	Spatial by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Semi-Supervised Learning | Tobias Hinz</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../css/main.css" />
+		<link rel="icon" href="../images/favicon.ico">
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+	</head>
+	
+	<body class="landing">
+
+		<!-- Header -->
+			<header id="header">
+			<div class="container 95%">
+				<ul class="icons">
+					<li><a href="https://www.linkedin.com/in/tobias-hinz-397881123" class="icon fa-linkedin" target="_blank"></a></li>
+					<li><a href="https://github.com/tohinz" class="icon fa-github" target="_blank"></a></li>
+					<li><a href="https://www.inf.uni-hamburg.de/en/inst/ab/wtm/people/hinz.html" class="icon fa-university" target="_blank"></a></li>
+				</ul>
+			
+				<nav id="nav">
+					<ul>
+						<li><a href="../index.html" class="active">HOME</a></li>
+						<li><a href="../index.html#two">PUBLICATIONS</a></li>
+						<li><a href="../index.html#three">BLOG</a></li>
+						<li><a href="../index.html#four">CONTACT</a></li>
+					</ul>
+				</nav>
+			</div>
+			</header>
+
+			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+
+			<!-- One -->
+				<section id="one" class="wrapper style1">
+					
+					<div class="container 75%">
+						<header>
+							<h2 style="text-align: center">Semi-Supervised Learning with (Deep) Neural Networks:<br> An Overview</h2>
+							<p style="text-align: center">Tobias Hinz, XX. XXXX 2019</p>
+						</header>
+					</div>
+				</section>
+				
+			<!-- Intro -->
+				<section id="intro" class="wrapper style1">
+					
+					<div class="container 75%">
+						<h3>Introduction</h3>
+						<p>Welcome to this blog post about semi supervised learning (SSL) for deep neural networks.
+						In this blog post we will concentrate on the latest developments in the SSL literature.
+						More specifically, we will look into SSL approaches for image classification without the need for a generative model.
+						Image classification is a popular task for deep neural networks such as convolutional neural networks (CNNs).
+						Since it is fairly easy to evaluate and since we have many different, fully labelled data sets of varying size and complexity this task has garnered a lot of attention over the last couple of years.
+						Currently, it is also one of the most common tasks to evaluate SSL approaches on.
+						In the following, we will quickly describe what SSL is and why it is useful, before looking at some of the current approaches for image classification.
+						</p>
+					</div>
+				</section>
+			
+			<!-- SSL -->
+				<section id="ssl" class="wrapper style1">
+					
+					<div class="container 75%" align="justify">
+						<h3>What is SSL?</h3>
+						<p>When training an algorithm to learn something useful from any given data we can usually train them in a supervised or in an unsupervised manner.
+						<strong>Supervised</strong> training assumes that we know the desired output for <strong>every</strong> data sample that we use during training.
+						For example, in image classification that would mean that we know the class (cat, dog, bird, ...) for every image in our training set.
+						<strong>Unsupervised</strong> training, on the other hand, means that we do know the class for <strong>none</strong> of our images in the training set.
+						<strong>Semi-supervised learning</strong> (SSL) is a mixture of these two paradigms and assumes that we know the class for <strong>some</strong> of our images.
+						Usually, in the SSL framework we have a large data set of images, but only know the correct class for a small subset of them.
+						We could of course use the small subset of labelled data points to train a regular supervised model on them, however, the problem is that we will easily overfit the data, especially if we only have very few labelled samples and use a complex model such as a CNN.
+						The idea of SSL is that we can get some information even from the unlabelled data points which can help us learn an overall better model, see Fig. 1 for an example.
+						</p>
+						
+						<figure>
+						   <img src="../images/SSL/two_moons.png" alt="SSL Example"/>
+						   <figcaption><i>Figure 1: The leftmost image shows our available data, in which two samples are labelled (see the two small coloured dots).
+						   The image in the middle shows a possible decision boundary of a classifier that only gets the two labelled samples for training.
+						   The rightmost image shows a possible better decision boundary of a model that can also make use of the unlabelled data during its training.</i></figcaption>
+						</figure>
+						<br>
+						
+						<p>Let's assume we have a data set \(X_L=\{x_i\}_{i=1}^{l}\) consisting of \(l\) images and \(Y=\{y_i\}_{i=1}^{l}\) being the set of accompanying labels assigning each data point to one of \(C\) classes.
+						Additionally, we have a number of images \(X_U=\{x_i\}_{i=l+1}^{n}\) for which we do not have accompanying labels. 
+						In SSL the full data set \(X\) consists of a set of labelled images \(X_L\) and unlabelled images \(X_U\): 
+						$$X = X_L &#8899; X_U\tag{1}\label{a},$$
+						where our set of labels \(Y\) only contains labels for the labelled subset \(X_L\).
+						Our labels are usually encoded as one-hot vectors, meaning the label \(y_i \in \{0,1\}^C\) for the <i>i</i>-th data point in \(X_L\) belonging to class \(c\) is a vector of length \(C\) which is zero everywhere except at the class index:
+						$$(y_i)_k = \begin{cases}
+							 			1 & \text{if}\ k = c, \\
+							 			0 & \text{if}\ k \neq c
+							 			\end{cases}.$$
+						</p>
+						
+						<p>We process our image input with some model \(f\) (often a CNN) which has learnable parameters \(&theta;\) and get as output a prediction of the class label \(\hat{Y}\):
+						$$\hat{Y} = f(X;\theta).$$
+						In the case of neural networks we usually use some form of gradient descent to optimize the model's parameters.
+						Through this the model parameters \(\theta\) are tweaked so that the model's output \(\hat{Y}\) gets closer to the ground truth labels \(Y\) for a given input \(X\).
+						To use gradient descent we need a loss function \(L\) which we can use to optimize the model's parameters.
+						In SSL the loss function usually contains (at least) two distinct parts: a supervised part \(L_{sup}\) and an unsupervised part \(L_{unsup}\).
+						The supervised part of the loss function \(L_{sup}\) makes use of the labelled data samples to improve the model's quality.
+						To use the unlabelled part of the data set, the unsupervised loss \(L_{unsup}\) imposes some sort of loss on the input that does not require ground truth labels.
+						Most approaches for SSL differ mainly in how the unsupervised part of the loss function is calculated, while most models for image classification make use of the same supervised loss.
+						</p>
+						
+						<p>
+						If the input is part of our labelled samples we know what the output of the model should be and we can compare the output of our model \(\hat{Y}\) with the known ground truth labels \(Y\).
+						This is usually done by minimizing the cross-entropy between the model's output and the ground truth labels:
+						$$L_{sup} = -\sum_{i} y_i\ log(\hat{y}_i).$$
+						In the rest of this post we will assume that the given loss function \(L\) is made up of two parts:
+						$$L = L_{sup} + \lambda L_{unsup},$$
+						where \(L_{sup}\) is the supervised loss calculated with labelled data points (mostly the cross-entropy loss), \(L_{unsup}\) is the unsupervised loss which is either calculated for all data points or just the unlabelled ones, and \(\lambda\) is a factor that controls the influence of \(L_{unsup}\) on the total loss.
+						How to calculate an informative loss on unlabelled data points is one of the main challenges of semi- and unsupervised learning and will be the main focus of the rest of this post.
+						</p>
+					</div>
+				</section>
+				
+				<!-- Types of SSL -->
+				<section id="ssl-types" class="wrapper style1">
+
+					<div class="container 75%">
+						<h3>Which types of SSL are there</h3>
+							<p>There are several taxonomies that we can use to define different kinds of semi-supervised learning.
+							We will describe two such taxonomies, transductive vs inductive and generative vs discriminative, before looking at some of these approaches in more detail in the next section.
+							Given some labelled and unlabelled samples (known in advance) transductive approaches have the goal to predict the labels for the unlabelled samples, i.e. to apply SSL techniques to label all provided unlabelled samples correctly.
+							In other words, given a training set of labelled data points the goal is to predict the labels of only the given set of unlabelled data points.
+							A learner is transductive if it only works on the labelled and unlabelled training data and can not handle unseen data.
+							Inductive models, on the other hand, try to lean a model to predict labels of previously unseen data.
+							To learn this model the available labelled and unlabelled samples are use in one way or another.
+							In this case, the prediction function is defined on the entire input space and inductive learner can, therefore, naturally handle previously unseen data at test time.
+							</p>
+							
+							<p>Another way to describe SSL techniques is in the setting of generative and discriminative models.
+							Discriminative models try to predict the label \(y\) for a given input \(x\), i.e. they try to model \(P(y\vert x)\), which is usually done by some form of maximum likelihood estimation.
+							Generative models, on the other hand, try to learn something about the data distribution \(P(x)\) itself, or, in the case of available labels, try to model the joint distribution \(P(x,y)\).
+							As a consequence, generative models can be said to be more powerful than discriminative models.
+							They also have no strict need for any labels, so can naturally be trained completely unsupervised and still learn useful characteristics about the data distribution.
+							Nonetheless, discriminative models are (so far) much more popular for classification (i.e. discriminative) tasks, since they usually perform better on those tasks than generative models.
+							A reason for this can be that the fitness measure for generative models is not discriminative, so that better generative models are not necessarily better predictors of class labels.
+							Additionally, estimation is much more demanding than discrimination, since the model of \(P(x,y)\) is exhaustive, hence necessarily more complex than the model of \(P(y\vert x)\).
+							</p>
+							
+							<p>For more details on these kinds of models and a more thorough background check out the overviews by <a href="https://www.molgen.mpg.de/3659531/MITPress--SemiSupervised-Learning.pdf" target="_blank">Olivier Chapelle et al.</a> and <a href="http://legacydirs.umiacs.umd.edu/~hal/courses/2011F_ML/out/ssl_survey.pdf" target="_blank">Xiaojin Zhu</a>.
+							Additionally, see <a href="https://arxiv.org/abs/1804.09170" target="_blank">Oliver et al.</a> for a current view on challenges of SSL approaches in academia and real world scenarios.
+							In this blog post we will focus on inductive discriminative SSL approaches for image classification with deep neural networks.
+							</p>
+					</div>
+				</section>
+			
+			<!-- SSL with Loss Term -->
+				<section id="ssl-loss-term" class="wrapper style1">
+					
+					<div class="container 75%" align="justify">
+						<h3>SSL approaches without generative models, i.e. that adapt loss term</h3>
+							<p>As mentioned above one of the main challenges is to find a way to train our models to make use of the unlabelled data points.
+							In this post we will focus on semi-supervised models that do not make use of generative models.
+							Instead, we focus on approaches that adopt the training loss (often by combining a \(L_{unsup}\) with the supervised cross-entropy loss) in a way that makes it possible to use unlabelled data.
+							This part is structured roughly by the different kinds of losses the different approaches use.
+							<strong>Graph based approaches</strong> work under the assumption that similar points in the data space (based on some predefined distance metric) should have the same label.
+							<strong>Entropy based approaches</strong> encourage the model to make very confident predictions about all data points.
+							For the supervised training the prediction should be the same as the label, while for unlabelled data points the model is simply trained to have low entropy in its prediction (i.e. it does not matter which class it predicts for a given unlabelled data point, as long as it is sure about its prediction).
+							<strong>Consistency based approaches</strong> work on the assumption that small perturbations to the input (e.g. adding a small amount of noise to the image) should not change the output (the model's prediction).
+							<strong>Co-training</strong> assumes that we have multiple views of the same data which contain enough information on their own to classify the input correctly.
+							The multiple classifiers are trained on the different views and the predictions of the individual classifiers are used to augment the training sets of the other classifiers.
+							Since this post focuses on SSL in combination with deep neural networks we will leave out a lot of the related work of SSL in combination with other approaches such as Support Vector Machines or Decision Trees.
+							</p>
+						
+							<h5>Graph Based / Label Propagation</h5>
+								<p>Graph based approaches build a fully connected graph using the labelled and unlabelled data points.
+								Nodes in the graph are the data points and connections between the nodes are usually undirected.
+								The weight (strength) of the connection between two nodes (data points) is based on their similarity.
+								For this we need some kind of distance metric to calculate the distance/similarity between two data points.
+								Given the graph the assumption is then usually that points that have a strong connection are similar, i.e. have the same label.
+								We can use this for approaches like label propagation, where we can assign labels to unlabelled points based on the labels of their closest neighbours in the graph.
+								One of the early works to use this approach is <a href="https://pdfs.semanticscholar.org/8a6a/114d699824b678325766be195b0e7b564705.pdf" target="_blank">Zhu et al.</a> (2002) who perform label propagation to assign labels to their unlabelled data points.
+								They assume a given distance metric (in their case they choose Euclidean distance) and the strength of the connection between data points is proportional to their distance, i.e. data points that are close have a stronger connection than data points that are far apart.
+								The connection weights are then stored in a similarity matrix \(W\), which is a \(n \times n\) matrix for our \(n\) data points, where \(w_{ij}\) is the connection strength between the \(i\)-th and \(j\)-th data point.
+								The entries of \(W\) are then normalized to form transition probabilities \(T\): \(w_{ij} = \frac{w_{ij}}{\sum_k^n w_{kj}}\).
+								Another matrix \(n\times C\) (\(C\) is the number of classes) matrix \(Y\) is defined which contains the labels.
+								For all labelled data points the corresponding row contains its label (a one-hot vector), while the labels of unlabelled data are initialized with some values (e.g. all zeros).  
+								They then develop a label propagation algorithm in which the labels propagate through the graph based on the transition probabilities.
+								The label propagation algorithm then consists of three steps which are iteratively repeated until convergence.
+								First, each node's label gets updated by multiplying the transition probability with all other nodes: \(Y = TY\).
+								Second, \(Y\) is row-normalized to maintain the class probability interpretation.
+								Third, the the labels for the labelled data points are clamped, i.e. reset to the ground truth value (a one-hot vector).
+								These three steps are repeated until the algorithm converges.
+								They then develop a clever way of how this algorithm can be computed analytically, without having to go through the iterative process.
+								To assign the final labels to the unlabelled data we can take the argmax over each row of \(Y\).
+								</p>
+
+								<p><a href="https://link.springer.com/chapter/10.1007/978-3-642-35289-8_34" target="_blank">Weston et al.</a> 2008 extend the label propagation algorithm to the deep learning setting.
+								Again, it requires some predetermined distance metric to calculate the similarity between data points which is used to calculate the similarity matrix similarly to the previous approach before the optimization begins.
+								The similarity matrix \(W\) is then a sparse matrix where \(w_{ij}=1\) if \(x_i\) and \(x_j\) are neighbours and \(w_{ij}=0\) otherwise.
+								There are different approaches of how to build such a similarity matrix based on the given distance metric, but one simple way is to use the \(k\)-nearest neighbours (kNN) approach for this.
+								To calculate the unsupervised loss the Siamese network loss is used: 
+								The unsupervised loss is based on the loss from Siamese networks.
+								$$L_{unsup} = \begin{cases}
+							 			\vert\vert f_\theta(x_i)-f_\theta(x_j)\vert\vert^2 & \text{if } w_{ij} = 1 \\
+							 			max(0, m-\vert\vert f_\theta(x_i)-f_\theta(x_j)\vert\vert )^2 & \text{if } w_{ij} = 0
+							 			\end{cases}.$$
+							 	The algorithm then first picks a random labelled sample and optimizes the supervised loss.
+							 	Then, first a random pair of neighbours is picked and the unsupervised loss is optimized, before a random pair of non-neighbours is picked and the unsupervised loss is optimized again.
+							 	The unsupervised loss forces neighbours to be close together in the embedding space (i.e. form a cluster), while forcing non-neighbours to have a distance of at least \(m\) in the embedding space.
+							 	The key point here is that the unsupervised loss works directly on the embeddings from our model and not on the input data or labels.
+								</p>
+								
+								<p><a href="https://arxiv.org/abs/1611.01449" target="_blank">Hoffer et al.</a> (2016) take this one step further by also learning the distance function and iteratively updating the graph and similarity matrix during training.
+								The distance here is not the Euclidean distance between data inputs anymore, but instead is the Euclidean distance between the embeddings \(f_\theta(x_i)\).
+								They then introduce two kinds of unsupervised losses.
+								The first part of the loss forces the model to build clusters in the embedding space (i.e. embeddings of the same class should be closer to each other than to embeddings of any other class) by minimizing the cross-entropy between the distance distribution and the embeddings.
+								This means that any two samples \(x_i, x_j\) belonging to the same class should have a smaller distance in the embedding space than to any other sample \(x_k\) from a different class: 
+								$$\vert\vert f_\theta(x_i)-f_\theta(x_j)\vert\vert_2 < \vert\vert f_\theta(x_i)-f_\theta(x_k)\vert\vert_2.$$
+								The second part is the unsupervised loss and is there to reduce the overlap in clusters in the embedding space of unlabelled data by reducing the entropy of the distance distribution.
+								This means that the embedding of an unlabelled sample should be close to a given cluster of labelled samples, but far away from every other cluster.
+								So for a given unlabelled sample \(x_i\) and labelled samples \(z_l, z_k\) belonging to classes \(l\) and \(k\in C\setminus\{l\}\) respectively there exists a class \(l\) such that:
+								$$\vert\vert f_\theta(x_i) - f_\theta(z_l)\vert\vert_2 \ll \vert\vert f_\theta(x_i) - f_\theta(z_k)\vert\vert_2.$$
+								The similarity matrix for a given sample \(x_i\) is then calculated in the embedding space with respect to a set of labelled samples \((z_1, ..., z_C)\) and is represented as a discrete distribution for the probability of the sample \(x_i\) belonging to any of the given classes \(C\):
+								$$P(x_i; z_1, ..., z_C)_i = \frac{e^{-\vert\vert f_\theta(x_i)-f_\theta(z_i)\vert\vert^2}}{\sum_j^C e^{-\vert\vert f_\theta(x_i)-f_\theta(z_j)\vert\vert^2}}.$$
+								\(P\) is then be used to calculate the two parts of the unsupervised loss.
+								The first part of the unsupervised loss is calculated as the cross-entropy of \(P\), a labelled sample \(x_i\) and a set of labelled samples \(z_1, ..., z_C\):
+								$$L_{sup} = H(I(x_l), P(x_l; z_1, ..., z_C)),$$
+								where \(I(x_l)\) is the one-hot vector encoding the label of \(x_l\).
+								The second part of the loss can be calculated on both labelled and unlabelled data points and is simply the entropy of the distance distribution:
+								$$L_{unsup} = H(P(x_i; z_1, ..., z_C)).$$
+								In practice the algorithm randomly samples a set of labelled samples \(z_1, ..., z_{\vert C\vert}\) at each iteration and uses these samples to calculate the distance distribution \(P\) for the rest of the data points in the current batch.
+								The final model can then be used together with the kNN algorithm in the embedding space to classify new data points.								
+								</p>
+								
+								<p><a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeusser_Learning_by_Association_CVPR_2017_paper.pdf" target="_blank">Haeusser et al.</a> (2017) introduce learning by association.
+								The idea it to traverse from the embedding of a labelled sample to an embedding of an unlabelled sample and then back to a labelled sample's embedding.
+								This "cycle" is counted as correct when both the start and the final embedding belong to images of the same class.
+								While the method is not specifically formulated via graphs it bears many similarities and uses related approaches.
+								The transition between embeddings, i.e. the decision which labelled or unlabelled embedding should be visited based on the current embedding is based on a transition probability which is obtained from a similarity measure between embeddings.
+								The goal is to optimize the embeddings in a way that maximizes the probabilities of correct cycles, i.e. walks that start and finish within the same class.
+								At train time labelled and unlabelled samples \(x_L\) and \(x_U\) are sampled and their embeddings \(z_L\) and \(z_U\) are obtained via a CNN.
+								The similarity \(m_{ij}\) between two embeddings \(x_i\) and \(x_j\) is calculated as the dot product: \(m_{ij} = x_i\cdot x_j\).
+								The transition probability \(w_{ij}\) between the two embeddings is then calculated by softmaxing the embeddings:
+								$$w_{ij} = \frac{e^{m_{ij}}}{\sum_j e^{m_{ij}}}.$$
+								The round trip probability \(P^{ikj}\) of starting at embedding \(z_i\) and ending at embeddings \(z_j\) can then be calculated as:
+								$$P^{ikj} = \sum_k w_{ik}w_{kj},$$
+								and the round trip probability of a correct walk is:
+								$$P(correct walk) = \frac{1}{\vert A\vert}\sum_{i\sim j}P^{ikj},$$
+								where \(i\sim j \leftrightarrow \text{class}(z_i) = \text{class}(z_j)\) and \(\vert A\vert\) is the number of labelled samples in the batch.
+								These probabilities are then used to construct two unsupervised losses.
+								The first unsupervised loss, called the walker loss, penalizes incorrect walks and encourages a uniform probability for all walks back to the correct class.
+								It optimizes the cross-entropy between the uniform probability of correct cycles T and the respective cycle probabilities:
+								$$L_{unsup}^{walker} = H(T,P^{ikj}),$$
+								where \(T\) is the uniform target distribution which is \(\frac{1}{\vert c\vert}\) if class(\(z_i\))=class(\(z_j\)) and \(0\) otherwise where \(\vert c\vert\) is the number of occurences of class \(c\in \{1,...,C\}\).
+								There might be some unlabelled embeddings that represent difficult to classify data.
+								The unsupervised visit loss minimizes the cross-entropy between the uniform target distribution \(V\) and the visit probabilities \(P^{visit})\).
+								This encourages the model to use all unlabelled embeddings instead of only using "easy" embeddings for its cycles:
+								$$L_{unsup}^{visit} = H(V, P^{visit}),$$
+								where \(P^{visit}_k = \langle P^{ik}\rangle_i\) are the probabilities of visiting unlabelled embedding \(z_k\) from some labelled embedding \(z_i\) and and \(V = \langle\frac{1}{\vert B\vert}\rangle_k\) with \(\vert B\vert\) being the number of unlabelled samples in the batch.
+								These two loss functions are then combined with the supervised loss in order to make use from both the labelled and unlabelled embeddings.
+								</p>
+								
+								<p><a href="https://arxiv.org/abs/1806.02679" target="_blank">Kamnitsas et al.</a> (2018) create a graph over the data's embeddings \(f_\theta(x)\) to model the data manifold.
+								The embeddings are then regularized to make the graph more favourable for class separation by increasing the inter-class distance in the data embeddings.
+								The main intuition is that the embedding space for data samples should already cluster the data, where data with the same label should be in the same cluster and all data points within a cluster should be of the same class.
+								Their approach is similar to the one by <a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeusser_Learning_by_Association_CVPR_2017_paper.pdf" target="_blank">Haeusser et al.</a> we previously talked about.
+								The main difference is that Kamnitsas et al. allow longer walks in the embeddings space.
+								While Haeusser et al. only had a short walk from labelled to unlabelled embedding and back, Kamnitsas et al. allow walks of arbitrary length and their walks are not restricted to alternate between labelled and unlabelled embeddings.
+								The graph is used to capture the structure of the embeddings in the latent space.
+								At each training iteration labelled and unlabelled data points \(x_L\) and \(x_U\) are sampled and the model embeds them into feature space \(z=f_\theta(x)\).
+								Then, a fully connected graph is built, where each embedding is connected to every other embedding.
+								The weight of each connection is based on the similarity of the two embeddings: \(w_{ij} = e^{p(z_i,z_j)}\), where \(p\) is a similarity score, e.g. the Euclidean distance.
+								Again, a transformation matrix is constructed as in <a href="https://pdfs.semanticscholar.org/8a6a/114d699824b678325766be195b0e7b564705.pdf" target="_blank">Zhu et al.</a> by normalizing \(w_{ij}\) to obtain a probability interpretation: \(w_{ij} = \frac{w_{ij}}{\sum_k w_{ik}}\).
+								Then, label propagation (as in <a href="https://pdfs.semanticscholar.org/8a6a/114d699824b678325766be195b0e7b564705.pdf" target="_blank">Zhu et al.</a>) is performed to obtain the estimated class posteriors for the unlabelled data.
+								One important note here is that the analytic solution for label propagation by Zhu et al. is differentiable, which is an important condition for the rest of the algorithm.
+								However, instead of using these estimated labels for inference or to train the classifier, they are only used to capture the arrangement of clusters in the latent space in order to subsequently optimize this arrangement.
+								The goal is to optimize this arrangement so that it forms one single cluster per class.
+								To achieve this state, the transition probabilities between any two samples of a given class should be the same, while they should be zero for any inter-class transitions.
+								This can be expressed by a (soft) constraint on the transition probabilities \(w_{ij}\):
+								$$w_{ij} = \sum_c^C z_i^c\frac{z_j^c}{m^c},\ \ m^c = \sum_i z_i^c,$$
+								where \(z_i^c\) is the posterior probability for node \(i\) to belong to class \(c\) after label propagation, and \(m^c\) is the expected mass assigned to class \(c\).
+								To encourage \(z\) to form clusters we can therefore minimize the cross-entropy between the ideal transition matrix (that adheres to the above constraint) and the current transition matrix.
+								$$\hat{L}_{unsup} = \frac{1}{N^2}\sum_{i,j}^N -\hat{w}_{ij} \text{ log}(w_{ij}),$$
+								where \(\hat{w}\) are the ideal transition probabilities and \(w\) are the current transition probabilities.
+								This loss is further adapted to include the intuition that existing clusters should not be disturbed during optimization.
+								Therefore, the loss is further designed in a way so that it attracts points of the same class along the graphs connections.
+								To do this the loss models a Markov chain of multiple transitions between data points in the graph.
+								Transitioning between data points of the same class should have a high probability (since they are close by in the same cluster), while transitioning to points of another class should have a low probability.
+								To calculate the probability \(m_{ij}\) that two nodes belong to the same class we can again use the class posterior estimations from the label propagation algorithm and calculate their dot product: \(m_{ij} = z_i\cdot z_j\).
+								The joint probability of transitioning from node \(i\) to node \(j\) can then be calculated as \(w_{ij}m_{ij}\)
+								Let \(W\) be the transition matrix containing all \(w_{ij}\), \(\hat{W}\) be the ideal transition matrix, and \(M\) be the matrix containing all \(m_{ij}\).
+								We can then calculate the probability of a Markov process to start at node \(i\), perform \((s-1)\) transitions between nodes of the same class and then end at any node \(j\) as the element \(W_{ij}^s\), with \(W_{ij}^s = (W\circ M)^{s-1}W\), where \(\circ\) denotes the elementwise product.
+								The final unsupervised loss then optimizes \(W^s\) to be similar to the ideal transition probabilities \(\hat{W}\):
+								$$L_{unsup} = \frac{1}{S}\sum_s^S\frac{1}{N^2}\sum_{i,j}^N -\hat{W_{ij}}\text{ log}W_{ij}^s,$$
+								where \(S\) is the maximum number of Markov steps that are performed and the unsupervised loss is optimized jointly with the supervised loss (the cross-entropy loss on labelled samples).
+								</p>
+													
+							<h5>Entropy based</h5>
+								<p>Entropy based models force models to be confident about their predictions.
+								This is achieved by minimizing the model predictions' entropy.
+								Since the predictions' entropy can be minimized without access to ground truth labels to compare against we can apply entropy minimization directly to the model's output for both labelled and unlabelled data.
+								One of the first works on this concept was done by <a href="http://papers.nips.cc/paper/2740-semi-supervised-learning-by-entropy-minimization" target="_blank">Grandvalet et al.</a> (2004).
+								In this case the unsupervised loss term is the entropy of predictions for the unlabelled data:
+								$$L_{unsup} = \lambda\sum_i f_\theta (x_i) \text{ log}f_\theta(x_i),$$
+								for unlabelled input data \(x_i\), a model \(f\) with parameters \(\theta\), and \(\lambda\) weighting the influence of the unsupervised loss term.
+								Interestingly, <a href="https://openreview.net/forum?id=HyhbYrGYe" target="_blank">Pereyra et al.</a> (2017) showed that the exact opposite, namely penalizing outputs that are too confident, can be a powerful regularizer for supervised learning.
+								</p>
+								
+								<p>Pseudo labelling, sometimes also called self-training or incremental training is one of the most straight forward ways of doing SSL and can be seen as a special way to minimize the entropy of the model's predictions.
+								<a href="https://ieeexplore.ieee.org/abstract/document/4129456" target="_blank">Rosenberg et al.</a> (2005) used this approach.
+								In its simplest form a classifier is trained on the labelled subset of data and then makes predictions on the unlabelled subset.
+								Then, the subset of unlabelled data for which the classifier is very confident in its prediction (e.g. low entropy in its output) is added to the labelled data set, together with the labels predicted by the classifier.
+								The classifier is then again trained on the (now larger) labelled data set and this process is repeated iteratively.
+								This approach faces some problems though, such as adding wrong samples to the labelled data set which can hinder or even negatively affect the training process.
+								<a href="https://pdfs.semanticscholar.org/798d/9840d2439a0e5d47bcf5d164aa46d5e7dc26.pdf" target="_blank">Lee</a> (2013) extended this approach to the deep learning approach.
+								Since pseudo labelling encourages the model's predictions to be one-hot vectors in the long run (by adding predictions with high confidence as class labels to the supervised data set), this is effectively one of the early ways of entropy based SSL.
+								</p>
+
+								<p>
+								problem: high capacity model might just overfit to the data
+								</p>
+								
+								<p><a href="https://ieeexplore.ieee.org/abstract/document/7532690" target="_blank">Sajjadi et al.</a> (2016) took this approach to an extreme by adding an unsupervised loss term that forces the model's output to be close to a one-hot vector, i.e. 1 for the correct class and 0 for every other class.
+								This is essentially a different way of enforcing a low entropy on the output, by adding a prior on the model output.
+								Let \(f_j(x_i)\) be the \(j\)-th output unit of the model's prediction for \(x_i\), i.e. if \(x_i\) belongs to class \(k\in\{1, ..., K\}\):
+								$$f_j(x_i) = \begin{cases}
+							 			1 & \text{if}\ j = k, \\
+							 			0 & \text{if}\ j \neq k
+							 			\end{cases}.$$
+								The original loss function would be then be a Boolean function with disjunction and conjunction which outputs "True" (1) if the output is of valid form and "False" (0) otherwise:
+								$$\hat{L}_{unsup} = \lor_{j=1}^K (\land_{k=1, k\neq j}^K \lnot f_k\land f_j)$$
+								However, it is not straight forward to impose this prior in a loss function that has derivatives, which is necessary to optimize the model with a gradient descent algorithm.
+								They get around this by approximating the loss function with a differentiable function. 
+								The conjunction of a set of binary variables \(\land_{i=1}^K\) is replaced by their product \(\prod_{i=1}^K x_i\), the \(not\)-operation \(\lnot x_i\) is replaced by \(1-x_i)\), and the disjunction of binary variables \(\lor_{i=1}^K x_i\) is replaced with their sum \(\sum_{i=1}^K x_i\).
+								Through this they arrive at their final loss function which can be used with gradient descent:
+								$$L_{unsup}^{ME} = -\sum_{x_i}\left [\sum_{j=1}^K f_j(x_i)\prod_{k=1, k\neq j}^K (1-f_k(x_i))\right ],$$
+								where \(ME\) stands for mutual exclusivity, since this loss trains the model to predict only one class for a given input.
+								</p>
+								
+								<p>This work was further extended by <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a> (2016).
+								In this work the training procedure is extended with some form of stochasticity (e.g. dropout) and the same data sample is sent through the network \(n\) times.
+								Due to the stochasticity this produces \(n\) different outputs \(f_\theta (x_i)\).
+								The unsupervised loss term from the previous work is then extended by also minimizing the squared difference between those different outputs for the same input.
+								As a result, the unsupervised loss function becomes
+								$$L_{unsup}^{TS} = \sum_{x_i}\left [\sum_j\sum_{k\neq j} \vert\vert f_\theta^j(x_i)-f_\theta^k(x_i)\vert\vert_2^2\right ],$$
+								where \(f_\theta^j(x_i)\) is the output of model \(f_\theta\) for the \(j\)-th pass through the network and \(TS\) stands for transformation/stability.
+								This is essentially a consistency based regularization term, discussed more in the next section.
+								The final loss is then a combination of the two previous unsupervised loss functions:
+								$$L_{unsup} = \lambda_1 L_{unsup}^{ME} + \lambda_2 L_{unsup}^{TS},$$
+								where the mutual exclusivity loss is needed to prevent "trivial" outputs for unlabelled data by forcing each prediction vector to be valid, i.e. predict one single class.
+								</p>
+								
+							<h5>Consistency Regularization</h5>
+								<p>In contrast to many graph based methods consistency targets use a <em>learned</em> distance metric implied by the abstract representations of the model and this distance metric can change as the model learns new features.</p>
+								
+								<p>Approaches that are based on <a href="http://www.jmlr.org/papers/v7/belkin06a.html" target="_blank">consistency regularization</a> assume that small perturbations of the input or of the features should not change the overall classification of the sample.
+								This builds somewhat on the "manifold assumption" which states that the (high-dimensional)) data distribution is not evenly distributed but is instead concentrated on specific parts, i.e. it lies on lower-dimensional manifold within the high-dimensional space.
+								We further often assume that data points that lie on the same manifold belong to the same class and that data points of other classes are concentrated on other manifolds which are further away in the input space.
+								As a consequence, if we slightly perturb the input, the result should still be on the same manifold (or very close) and, consequently, should still belong to the same class.
+								We can use this in the form of consistency regularization by training our model to give consistent outputs for similar, close-by data points and this output should also not change if we slightly perturb a given data point:
+								$$f_{\theta}(x) = f_{\theta}(x + \epsilon),$$
+								where \(\epsilon\) is some form of (small) perturbation.
+								Many of these approaches use (the equivalent of) a "teacher" and a "student" network.
+								The teacher network is a network that is based on predictions or model parameters from past training iterations (often some form of averaging over past training updates), while the student is the current, up-to-date network that is trained via some form of gradient descent.
+								We then use the teacher's predictions to guide the training of the student on unlabelled data, e.g. by minimizing the difference in predictions between the teacher and the student on unlabelled data points.
+								</p>
+																
+								<p><a href="https://arxiv.org/abs/1412.4864" target="_blank">Bachmann et al.</a> (2014) approach this by creating a pseudo-ensemble of neural networks.
+								This is done by applying stochastic methods (usually <a href="http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf" target="_blank">Dropout</a>).
+								By sampling multiple dropout masks \(\xi_i\) they have multiple "different" networks which are all applied to a given input and will give (slightly) different outputs.
+								Since the dropout masks are applied directly to the activations at the various layers of the network we can view them as a way of perturbing the learned features (or even the input if applied at the lowest layer).
+								The consistency regularization is then to train the model to have consistent activations and outputs on each layer, which is done by comparing the activations of the unperturbed network (no dropout) and the pseudo-ensemble (networks with dropout applied).
+								Assume that \(f^i_{\theta}(x, \xi)\) represents the activations of the <em>i</em>-th layer of the network when the dropout mask \(\xi\) is applied to all layers < <em>i</em> and \(f^i_{\theta}(x)\) is the output without any dropout.
+								The Pseudo-Ensemble Agreement (PEA) regularizer is then defined as:
+								$$L_{unsup} = \mathbb{E}_{x\sim p_x}\mathbb{E}_{\xi\sim p_{\xi}} \left [ \sum_i \lambda_i V_i(f^i_{\theta}(x, \xi), f^i_{\theta}(x))\right],$$
+								where \(\lambda_i\) controls the relative importance of \(V_i\) and \(V_i(\cdot,\cdot)\) is the consistency penalty.
+								This could for example be a cross-entropy loss or the squared difference.
+								As \(V_i\) does not need any labels to be calculated this loss can directly be applied to unlabelled samples.
+								</p>
+								
+								<p><a href="http://papers.nips.cc/paper/5947-semi-supervised-learning-with-ladder-networks" target="_blank">Rasmus et al.</a> (2015) developed the Ladder Network for semi-supervised learning.
+								A special case of the Ladder Network which does not contain a generative model is the \(\Gamma\)-network (called this way because of its architectural shape).
+								Given any standard feed-forward network the only modification is that one additional layer, the "decoder" is added to pen-ultimate layer of the original network (just before the final classification is made).
+								A given input is then passed through the network twice.
+								The first pass is the "clean" pass, in which the data is not perturbed, while on the second pass some form of noise (usually Gaussian) is added to each layer's activations (and to the input).
+								The goal of the additionally added layer is to denoise the embedding of the layer it is connected to, i.e. to reconstruct the clean embedding from the previous pass.
+								Assume a layer's uncorrupted embedding (no added noise) is \(x_i\) for the <em>i</em>-th layer.
+								In the first pass this embedding constitutes the input to the <em>(i+1)</em>-th layer.
+								However, in the second pass the embedding is corrupted with some small noise \(\epsilon\), i.e. \(x_i = (x_i + \epsilon)\) before it is forwarded to the next layer.
+								Assume that the <em>d</em>-th layer is the final layer before the actual classification, i.e. we connect the decoder to the <em>d</em>-th layer.
+								The unsupervised loss is then to minimize the squared error between the clean embedding \(x_d\) from the first pass and the "corrupted" embedding \(\hat{x_d}\) from the second pass:
+								$$L_{unsup} = \vert\vert x_d - \hat{x_d}\vert\vert_2^2,$$
+								which can be calculated even for unlabelled data points.
+								Since noise is added to each layer of the classification network this loss encourages the network to learn features that are not susceptible to the added noise, i.e. features that lead to consistent outputs for close-by data points.
+								Effectively we can treat the clean forward pass as the teacher prediction and the noisy pass as the student prediction.
+								The additional layer is then used to predict the teacher prediction given the student prediction.						
+								</p>
+								
+								<p><a href="https://arxiv.org/abs/1610.02242" target="_blank">Laine et al.</a> (2017) introduced the \(\Pi\)-Model and Temporal Ensembling which can be seen as a special case of <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a> work or a simplification of <a href="http://papers.nips.cc/paper/5947-semi-supervised-learning-with-ladder-networks" target="_blank">Rasmus et al.</a>. 
+								The main idea is to modify the \(\Gamma\)-network by removing the explicit denoising layer and instead applying some form of noise to the teacher predictions, too.
+								Instead of adding noise explicitly to each of the layers as in the \(\Gamma\)-network, Laine et al. apply noise by using stochastic data augmentation (e.g. randomly rotating or cropping the image) and dropout as in  <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a>.
+								In the \(\Pi\)-Model (as in the \(\Gamma\)-network and compared to \(n\) times in  <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a>) a data sample is evaluated twice to get two different outputs \(y\) and \(\hat{y}\) for the same input (due to the stochastic augmentation and different dropout masks).
+								The unsupervised loss is then the same as for the \(\Gamma\)-network, i.e. the squared error between the two outputs.								
+								To further improve the \(\Pi\)-Model they then introduce temporal ensembling.
+								Instead of evaluating the network twice for each data sample (which is expensive) in temporal ensembling each data sample is only evaluated once per training epoch and the prediction is stored.
+								In the next epoch these predictions are then used as the teacher values for the current network.
+								Since in this case the teacher values are predictions made by one single network they can be expected to be noisy.
+								To address this temporal ensembling aggregates the predictions from the previous epochs into an ensemble prediction which is used as the teacher value.
+								Given the predictions \(z_i\) of the current network, the temporal ensemble of previous predictions is updated by
+								$$z_{teacher} = \alpha z_{teacher} + (1-\alpha)z_{student},$$
+								where \(\alpha\) controls how much influence predictions of previous epochs should have on the current teacher predictions.
+								Due to the stochasticity in the training process (data augmentation, dropout) \(Z_i\) therefore contains a weighted average of the predictions of an ensemble of networks from the previous training epochs.
+								Compared to the \(\Pi\)-Model this has the advantages that each sample only needs to be evaluated once per epoch and that the predictions from the ensemble of models from previous epochs is likely less noisy.
+								</p>
+								
+								<p>This model was further extended by <a href="http://papers.nips.cc/paper/6719-mean-teachers-are-better-role-models-weight-averaged-consistency-targets-improve-semi-supervised-deep-learning-results" target="_blank">Tarvainen et al.</a> (2017), who introduced the Mean Teacher model.
+								Their observation was that the temporal ensembling suffered from two drawbacks: first, the teacher's prediction are only updated once per epoch (i.e. learned information is incorporated slowly) and second, the larger the data set, the longer the span of the updates. 
+								The mean teacher model tries to address these challenges by assembling a better teacher network.
+								The idea is to create the teacher by averaging the model's weights instead of its predictions.
+								This way, the teacher becomes not the average of previous predictions, but instead the average of previous models (therefore the name: mean teacher).
+								For a given input both the teacher and the student model are evaluated (i.e. we have to network evaluations per sample again, as in the \(\Gamma\)- and \(\Pi\)-Model).
+								Again, some form of stochasticity is applied for each evaluation by adding noise to some of the networks' layers.
+								As in the previous models, the (unsupervised) consistency loss is the squared difference between the outputs of the teacher and the student network.
+								After the weights of the student model have been updated (either only with the unsupervised loss or with the unsupervised and the supervised loss), the teacher's weights are updated as an exponential moving average of the student's weights:
+								$$\theta_{teacher} = \alpha \theta_{teacher} + (1-\alpha) \theta_{student},$$
+								where \(\theta\) are the respective model's weights.
+								Notice that this is essentially the same update as for the temporal ensembling model, but instead of the teacher's predictions we update the teacher's weights.
+								This has several advantages compared to the temporal ensembling model.
+								Firstly, this way information is aggregated in the teacher model after every update step, which means there is a faster feedback loop for the teacher and, secondly, the weight updates improve all layers' representations of the teacher and do not just focus on the final output as in temporal ensembling.
+								</p>
+								
+								<p><a href="https://ieeexplore.ieee.org/abstract/document/8417973" target="_blank">Miyato et al.</a> (2017) introduced Virtual Adversarial Training (VAT), which can also be seen as a special case of the \(\Pi\)-Model.
+								While the \(\Pi\)-Model applies random perturbations (e.g. in the form of dropout) to the data VAT applies a specific kind of noise, namely adversarial noise, to the data.
+								Adversarial noise \(\epsilon_{adv}\) is the minimum amount of noise one can apply to a given input such that the network maximally changes its prediction for the input (e.g. by changing its prediction from "dog" to "cat"):
+								$$\epsilon_{adv} = \underset{\epsilon_{adv} < \epsilon}{\text{arg max}}\ D(f_\theta(x), f_\theta(x+\epsilon_{adv})),$$
+								where \(\epsilon\) is the maximum amount of noise that is allowed and \(D\) is a non-negative function that measures the divergence between the two outputs (e.g. the cross-entropy).
+								Again, the network is evaluated twice for each input sample, once for the original sample \((x)\) and once for the adversarial sample \((x+\epsilon_{adv})\).
+								As previously, the unsupervised loss is then again the difference between the model's outputs \(f_\theta(x)\) and \(f_\theta(x+\epsilon_{adv})\) based on some distance function such as cross-entropy or the squared difference.
+								Using \(\epsilon_{adv}\) instead of random perturbations seems to work better, possibly because VAT only trains the model to have the same output for original points and points in adversarial direction, while random perturbations train the model to have the same output for all points in the vicinity.
+								Combining VAT with an additional entropy minimization loss similar to <a href="http://papers.nips.cc/paper/2740-semi-supervised-learning-by-entropy-minimization" target="_blank">Grandvalet et al.</a> and <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a> improves the performance of VAT even more.
+								VAT was also <a href="https://arxiv.org/abs/1605.07725" target="_blank">extended</a> for classification in the text domain where the adversarial perturbations are applied to the continuous word embeddings.
+								</p>
+								
+								<p><a href="https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewPaper/16322" target="_blank">Park et al.</a> (2018) introduced Virtual Adversarial Dropout (VAdD), a combination of VAT and the \(\Pi\)-Model/temporal ensembling.
+								While the \(\Pi\)-Model sends the same data point twice through the same network with two different (randomly samples) dropout masks \(\xi_1\) and \(\xi_2\), VadD samples one dropout mask randomly (\(\xi_1\)) and the second one adversarially (\(\xi_{adv}\)).
+								Adversarial dropout is defined similarly to adversarial noise as finding a dropout mask (with the same dropout probability) that maximally changes the network's output for the given input, where
+								$$\xi_{adv} = \underset{\vert\vert\xi_{adv} - \xi_1\vert\vert_2^2 < \epsilon}{\text{arg max}}\ D(f_\theta(x, \xi_1), f_\theta(x,\xi_{adv})).$$
+								As in the other models, the unsupervised loss is then the squared difference between the model outputs for the two different masks: \(\vert\vert f_\theta(x, \xi_1) - f_\theta(x,\xi_{adv})\vert\vert_2^2\) or, alternatively, the Kullback-Leibler divergence between the outputs.
+								</p>
+								
+								<p><a href="https://arxiv.org/abs/1805.09302" target="_blank">Cicek et al.</a> (2018) introduced another version of adversarial learning, namely adversarial weight perturbations.
+								Similarly to applying adversarial noise to the input (as is done in VAT) we can also apply adversarial noise to the weights \(\theta\) directly:
+								$$\theta_{adv} = \underset{\vert\vert\theta_{adv} - \theta\vert\vert_2^2 < \epsilon}{\text{arg max}}\ D(f_\theta(x), f_{\theta_{adv}}(x)).$$
+								In contrast to adversarial noise on the input, however, the parameters for both minimization and maximization here are both the same, namely the weights \(\theta\).
+								To solve this they introduce Adversarial Block Coordinate Descent (ABCD).
+								In ABCD, for each batch of training data we first randomly choose half the weights and perform gradient ascent with a small learning rate.
+								As a second step (on the same batch) we take the remaining weights and perform gradient descent with much larger learning rate.
+								This is straight forward for labelled data, since ABCD can be applied to the standard cross-entropy loss.
+								For unlabelled data ABCD calculated on the entropy loss for the model's two outputs with the two weight parameters \(\xi\) and \(\xi_{adv}\).
+								To further improve the performance ABCD can be combined with the loss from the VAT approach, leading to adversarial perturbations both on the input (VAT) and on the model's parameters (ABCD).
+								</p>
+								
+								<p><a href="https://link.springer.com/chapter/10.1007/978-3-030-01246-5_17" target="_blank">Chen et al.</a> (2018) replace the teacher network by an external memory module which stores information about previous training iterations.
+								The external memory is similar to a dictionary in which the keys are the learned feature representations of the different classes and the values are the associated prediction uncertainties for the given class.
+								Both the classes' feature representations and the prediction uncertainties are gradually accumulated, i.e. updated throughout the training process.
+								Similarly to temporal ensembling the idea is to not use one single up-to-date network as teacher network, but instead use use the memory (i.e. information from multiple past training iterations) to calculate the unsupervised loss.
+								A CNN is applied to obtain the image embeddings and a prediction vector (by applying the softmax function) for the probability that the image belongs to a certain class.
+								In order to obtain one feature representation for each class the memory module assumes that image embeddings of different classes form clusters in the embedding space.
+								The feature representation for a given class is then the cluster's centroid and the centroids in turn are updated with each training iteration.
+								The prediction uncertainty associated with a given classes' feature representation is the network's accumulated predictions of the past training iterations for the given class (normalized to keep a probability interpretation).
+								Only labelled samples are used to update the memory, while the memory is then used to calculate the unsupervised loss for unlabelled samples.
+								Suppose we have a \(n_j\) labelled samples \(x_i\) from the \(j\)-th class (\(j\in \{1, ..., K\}\)) in the current batch, as well as the associated image embeddings \(\hat{x}_i\) and class predictions \(p_i\) from the CNN.
+								The \(j\)-th memory slot \((k_j, v_j)\) (\(k_j\) is the classes' feature representation, i.e. the centroid of the image embedding cluster for that class and \(v_j\) is the prediction uncertainty for that class) is then updated after each training iteration as follows:
+								$$k_j = k_j - \alpha\nabla k_j \text{ with } \nabla k_j = \frac{\sum_i^{n_j} (k_j - \hat{x}_i)}{1+n_j},$$
+								$$v_j = \frac{v_j - \alpha\nabla v_j}{\sum_i^K (v_{j,i}-\alpha\nabla v_{j,i})} \text{ with } \nabla v_j = \frac{\sum_i^{n_j} (v_j - p_i)}{1+n_j},$$
+								where \(\alpha\) denotes the learning rate.
+								The updated memory module is then used to calculate the unsupervised loss term.
+								For this we first obtain the memory's prediction for the given input sample (i.e. the teacher prediction).
+								If the input is a labelled sample of class \(j\) the memory prediction \(\hat{p}\) is simply the prediction for the given class, i.e. \(\hat{p} = memory[k_j]\).
+								On the other hand, if the input is unlabelled we first compute a weighting for each of the classes based on the image embedding's similarity to each of the centroids and then calculate \(\hat{p}\) as a weighted sum of the different classes' predictions.
+								Again, we have the image embedding \(\hat{x}_i\) from an image \(I\).
+								We then calculate the weighting \(w(m_i\vert I)\) for each memory slot \(m_i = (k_i, v_i)\) and use this to get obtain the prediction \(\hat(p)\):
+								$$\hat{p} = \sum_i^K w(m_i\vert I) v_i \text{  with  } w(m_i\vert I) = \frac{e^{-\text{dist}(\hat{x},k_i)}}{\sum_j^K e^{-\text{dist}(\hat{x},k_j)}},$$
+								where \(\text{dist}(\cdot, \cdot)\) denotes the Euclidean distance.
+								With the two predictions \(p\) from the student network and \(\hat{p}\) from the memory (teacher network) we can now calculate the unsupervised loss:
+								$$L_{unsup} = H(\hat{p}) + \text{max}(\hat{p}) D_{KL}(p\vert\vert\hat{p}),$$
+								where \(H\) is the entropy and \(D_{KL}\) is the Kullback-Leibler divergence.
+								This loss, together with the supervised loss is then used to update the student network.
+								</p>
+								
+								<p><a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Luo_Smooth_Neighbors_on_CVPR_2018_paper.html" target="_blank">Luo et al.</a> (2018) observed that most consistency based approaches only regularize the model to be smooth (consistent) around each data point locally, while ignoring global structure in the data (e.e. manifolds or clusters).
+								Their idea is, therefore, to enforce smoothness not only locally around a given data point, but also between neighbours in the data space.
+								This is done by optimizing the image embeddings such that neighbours in the embeddings space such that they are similar to their neighbours and dissimilar for data points that are further away in the data space.
+								Since we assume that close by data points (i.e. data points within a cluster) belong to the same class this means that images that belong to the same class should have similar embeddings and embeddings of images from different classes should be different.
+								Again, the teacher network is a network based on previous training iterations built through temporal ensembling, while the student network is the current, up-to-date network.
+								Given image embeddings \(f_{teacher}(x_i)\) and \(f_{student}(x_i)\) of image \(x_i\) the unsupervised loss is calculated as
+								$$L_{unsup} = \sum_{x_i, x_j} l(f_{student}(x_i),f_{student}(x_j), W_{ij}),$$
+								where
+								$$W_{ij} = \begin{cases}
+							 			1 & \text{if}\ \text{argmax}(f_{teacher}(x_i)) = \text{argmax}(f_{teacher}(x_j)), \\
+							 			0 & \text{if}\ \text{otherwise}
+							 			\end{cases}.$$
+							 	The choice of the loss function \(l\) is flexible, here, the authors use contrastive Siamese networks:
+							 	$$l = \begin{cases}
+							 			\vert\vert f_{student}(x_i)-f_{student}(x_j)\vert\vert^2 & \text{if } W_{ij} = 1 \\
+							 			max(0, m-\vert\vert f_{student}(x_i)-f_{student}(x_j)\vert\vert )^2 & \text{if } W_{ij} = 0
+							 			\end{cases}.$$
+							 	This loss minimizes the difference between embeddings of images that belong to the same class, while embeddings of images from different classes are optimized to have a distance of at least \(m\).
+							 	As an additional loss the difference in predictions between the teacher and the student network for a given sample is also minimized in a similar way as in e.g. the \(\Pi\)-Network.
+								Compared to other methods (which only push the decision boundary away from each individual point) this method encourages embeddings to form clusters for the different classes, i.e. the decision boundaries are pushed away from clusters, not individual data points
+								</p>
+								
+								<p><a href="https://openreview.net/forum?id=rkgKBhA5Y7" target="_blank">Athiwaratkun et al.</a> (2019) made the interesting observation that many consistency based methods (e.g. \(\Pi\)-Model and Mean Teacher) make large updates in the model's parameter space even at the end of the training process.
+								Even though the prediction performance of the given model does not improve much (or at all) in the final training iterations the updates to the model's parameters are still large, i.e. the model changes a lot but the resulting performance does not.
+								This is especially the case when compared to fully supervised methods, which do not show this behaviour.
+								One way to interpret this is that we have a lot of different models with a similar performance at the end of training, yet we do not make optimal use of them.
+								Closer inspection shows that consistency based methods with stochastic gradient descent (SGD) traverse a large flat region in weight space at the end of training.
+								Athiwaratkun et al. suggest to make use of all these SGD iterates, since all of them have a similar accuracy but different weights.
+								Using only the last set of weight for the prediction at test time may therefore not be the best way, since many previous weight setting were equally accurate, but make different predictions and are at different points in weight space.
+								Essentially, the different sets of weights during the final training iterations describe different "views" on the data and using all of them can increase the overall performance.
+								They suggest to make use of the "different" models by using <a href="https://arxiv.org/abs/1803.05407" target="_blank">stochastic weight averaging</a> (SWA) of the different model weights in the last stages of training.
+								SWA averages weights traversed by SGD using a special learning rate schedule which can lean to improved performance in supervised training settings.
+								Athiwaratkun et al. change the learning rate schedule and also perform the weight averaging more often per epoch than in the original paper.
+								Finally, by applying SWA to the student networks of the \(\Pi\)-Model and the Mean Teacher with the updated methodology of Athiwaratkun et al. leads to a higher performance than the original models without SWA.
+								</p>
+								
+								<p><a href="https://arxiv.org/abs/1901.05657" target="_blank">Li et al.</a> (2019) note that one of the problems with consistency based approaches is confirmation bias, i.e. the model might learn wrong labels for unlabelled data which might hinder the overall performance.
+								This is because the student model "blindly" learns from the teacher's predictions, regardless of the quality of those predictions.
+								Their idea to mitigate this issue is by introducing a certainty-driven consistency loss (CCL)) which means that the student should take into consideration the teacher's certainty about its predictions.
+								If the teacher is uncertain about its prediction the student should either not use it at all (filtering CCL) or, alternatively, should assign a lower importance to it (temperature CCL).
+								The methodology for the teacher and the student network is the same as for the Mean Teacher (<a href="http://papers.nips.cc/paper/6719-mean-teachers-are-better-role-models-weight-averaged-consistency-targets-improve-semi-supervised-deep-learning-results" target="_blank">Tarvainen et al.</a>), i.e. the teacher's weights are calculated as an exponential moving average of the student's weights.								
+								Existing consistency based models usually use the teacher's output directly as prediction targets to train the student.
+								In CCL, however, not all of the teacher's predictions are used, at least not to the same degree.
+								To calculate the teacher's uncertainty in its prediction they first pass a given data point \(T\) through the teacher network with some stochastic components (e.g. dropout) to get \(T\) predictions.
+								While multiple metrics can then be used to calculate the uncertainty within those \(T\) predictions Li et al. mostly use the predictive variance to calculate the uncertainty.
+								The larger the predictive variance with respect to \(T\) times mean, the higher the uncertainty value \(U_i\) for a given data point \(x_i\).
+								When using the filtering CCL the student then either only uses the teacher's predictions on the data points where the uncertainty \(u_i\) is below a given value (hard filtering) or samples the teacher's predictions to learn from inversely weighted by their uncertainty (soft filtering).
+								With the temperature CCL the magnitude of the consistency loss is adjusted based on the uncertainty of the teacher.
+								For this at each training iteration a relatively higher temperature is applied to uncertain predictions (smoothing out the probability distribution over classes), while a relatively lower temperature is applied to certain predictions.
+								Overall, this approach provides a way to weigh the input of the teacher predictions for different inputs (instead of weighting every prediction equally), based on how certain the teacher is about its current prediction.
+								</p>
+								
+							<h5>Co-Training</h5>
+								<p>Co-Training is based on the idea that we can use different views (representations) of the data for our learning process.
+								It assumes that we have two or more redundant views of the data that should be conditionally independent given the class label and contain sufficient information that we could learn a competent classifier on each of them.
+								<a href="https://dl.acm.org/citation.cfm?id=279962" target="_blank">Blum et al.</a> (1998) then suggest to to train two learning algorithms separately on each view, and to use each algorithm’s predictions on unlabelled data to enlarge the training set of the other classifier.
+								One of the main challenges with this approach is that we need two or more redundant views of the data.
+								This naturally raises the question if this is possible for the given data and if the data naturally splits into two parts that are sufficient for training individual classifiers.
+								The other question is whether the different models that are trained on different views of the data learn to have overall consistent predictions for the data.
+								<a href="https://ieeexplore.ieee.org/abstract/document/1512038" target="_blank">Zhou et al.</a> (2005) extended this to tri-training, where we have three views of the data and three independent classifiers are trained.
+								The advantage of tri-training is that it does not require three different views of the data a priori, but instead it utilizes bootstrap sampling to get three different training sets from the existing data.
+								The algorithm proceeds by training the three classifiers on the labelled data and then obtain their predictions for the unlabelled data.
+								If two models agree on the label for an unlabelled sample, it is added to the third model's labelled training set and this process is repeated iteratively.
+								</p>
+								
+								<p><a href="https://www.ijcai.org/Proceedings/16/Papers/473.pdf" target="_blank">Cheng et al.</a> (2016) are one of the first ones to combine co-training with deep learning techniques.
+								The task is image classification with RGB-D images and the two views of their data are therefore the RGB images on the one hand and the depth images on the other hand.
+								They then train one CNN on the RGB images and another CNN on the depth images to obtain two different image embeddings.
+								Then they train three classifiers, one on the RGB image embeddings, one on the depth image embeddings, and one on the concatenated joint RGB and depth embeddings.
+								The two classifiers trained on the single modalities are then used to obtain new labels for the unlabelled data set which are added to the supervised training set if the two classifiers' prediction match.
+								The two main problems they observe with this approach is that the CNNs quickly overfit to the small labelled data set and that the classifiers' predictions are biased towards data that is common in the labelled data set, which adds further imbalances to the labelled training set.
+								They overcome these challenges by using autoencoder approaches to pretrain the two CNNs and by developing a novel method which ensures that the diversity in the labelled training set is not compromised.
+								</p>
+								
+								<p><a href="https://www.ijcai.org/proceedings/2018/0278.pdf" target="_blank">Chen et al.</a> (2018) extend tri-training to deep learning.
+								The basic approach stays the same, i.e. three networks are trained on three different training sets and we add unlabelled samples and their predicted labels to the labelled training set of one classifier if the two other classifiers agree on their prediction.
+								The lower layers of the CNN are the same for each of the data sets and are used for feature extraction.
+								Then, three different classifiers are trained on the extracted features for the three data sets.
+								The three data sets are constructed with output smearing (injecting random noise into the true labels) in order to generate three different labelled data sets.
+								The models are also regularly fine-tuned on their respective initial data set in order to prevent them from becoming too similar, which can hurt the training by introducing unwanted biases.
+								This approach can furthermore be combined with ideas from the consistency based literature that can help to improve the quality of the pseudo labels.
+								For example, a data point can be predicted multiple times with different dropout masks and if the output prediction is different from the average output too often then the sample is not added to the labelled training set.
+								</p>
+								
+								<p><a href="https://arxiv.org/abs/1803.05984" target="_blank">Qiao et al.</a> (2018) combine co-training with adversarial examples to circumvent the (strong) assumption that we have two different views of the data.
+								Simply training two models on the same data in the co-training paradigm does not necessarily help, since the two models would mostly collapse to the same model and thus always give the same predictions.
+								This is the reason why standard co-training requires two different views.
+								However, in many real world scenarios we do not have two conditionally independent views of the data.
+								Qiao et al. suggest to "construct" the second view of the data and thus keep some diversity between the different classifiers.
+								For this, they introduce the view difference constraint for which they generate adversarial examples for each model and then train the respective other model(s) to be resistant to this adversarial example.
+								As a result each model keeps its predictions unaffected on specific examples on which the other model fails.
+								This means that the models will still provide different and complementary views on the data and will not simply collapse to the same model.
+								</p>
+								
+								<p>Some recent approaches have used the co-training approach for sequence or text classification.
+								<a href="https://arxiv.org/abs/1809.08370" target="_blank">Clark et al.</a> (2018) introduce cross-view training for semi-supervised sequence modelling.
+								Here, a "full" model is trained normally, while additional, simpler models are trained on only a partial view of the data.
+								A partial view of the data is a subset of one of the intermediate representations of the full model, e.g. only the forward part of a Bi-LSTM or only the first half of a given sentence.
+								These additional models are then trained to predict the same output as the full model.
+								Since the additional models need to predict the same output as the full model, while only working on a partial view of the full model's representation this procedure can help with the overall quality of the learned representations.
+								The additional models aer only optimized for the unlabelled data, while the full model's prediction is kept unchanged.
+								In effect, this means that the additional models learn to imitate the full model on unlabelled data, but not the other way round.
+								<a href="https://arxiv.org/abs/1810.05788" target="_blank">Kiyono et al.</a> (2019) use SSL for text classification.
+								They also have multiple networks: one expert network and multiple imitator networks.
+								The overall approach is fairly similar to that of Clark et al., however, they use a mixture of both the expert and the imitator models to predict at test time, which can further boost the overall performance.
+								</p>
+								
+							<h5>Label Optimization</h5>
+								<p>Label optimization approaches treat the unknown labels of unlabelled samples as optimization variables which are, together with the model's parameters, iteratively updated throughout the training process.
+								<a href="http://openaccess.thecvf.com/content_ECCV_2018/html/Weiwei_Shi_Transductive_Semi-Supervised_Deep_ECCV_2018_paper.html" target="_blank">Shi et al.</a> (2018) introduce such an approach for CNNs.
+								In this approach both the unknown labels and the model's weights are updated iteratively until convergence.
+								In order to calculate the loss which is used to optimize both the unknown labels and the model's weights they first calculate a confidence level for each model prediction.
+								This confidence is based on the assumption that difficult to predict samples usually reside outside of clusters in the embedding space and that embeddings that already lie within clusters are more likely to be classified correctly.
+								For all embeddings \((z_1, ..., z_N)\) a proximity value \(d_i\) is calculated as
+								$$d_i = \sum_{j\in kNN(z_i}\vert\vert z_i - z_j\vert\vert_2,$$
+								where \(kNN(z_i)\) are the k nearest neighbours of \(z_i\).
+								A small \(d_i\) implies that the embedding lies within a cluster and therefore increases the probability that it will be classified correctly.
+								Therefore, the confidence value \(r_i\) is calculated as
+								$$r_i = 1-\frac{d_i}{d_{max}},\ d_{max} = \text{max}(d_1, ..., d_N).$$
+								All confidence values for the labelled data points are set to \(1\) and these confidence values are then used to weight the loss terms, so that data points with low confidence predictions have a lower influence on the final loss.
+								In order to further improve the learned features they also use the Siamese network loss (increase/decrease the distance between embeddings from different/the same classes) and by using consistency based approaches to minimize the difference in embeddings for the same input with different perturbations.
+								Training then proceeds by first training the model on all supervised data points until convergence. 
+								Then the confidence values \(r_i\) are calculated for all data points with the current model, before the unknown labels for the unlabelled data points are optimized to minimize the loss.
+								The unknown labels are optimized to minimize the cross-entropy between them and the current model's prediction on the unlabelled data.
+								After this step the model is trained from scratch again on all data points until convergence and the process starts over.
+								</p>
+								
+								<p><a href="http://openaccess.thecvf.com/content_ECCV_2018/html/Safa_Cicek_SaaS_Speed_as_ECCV_2018_paper.html" target="_blank">Cicek et al.</a> (2018) observe that the training loss decreases faster if labels are correct compared to incorrect labels.
+								As a result they use the speed of the training loss decrease to judge the quality of the labels and subsequently optimize the labels for unlabelled data such that it speeds up the training loss decrease.
+								The learning speed is defined as cumulative loss during a given time interval, in this case one epoch of training.
+								For the weight updates cross-entropy is used as the loss term, where the ground truth labels are used as target when available and the current "optimized" labels are used as target for the unlabelled sample.
+								To update the labels of unlabelled samples the loss is the aggregated training time in the previous epochs which should be minimized.
+								The training process then contains an outer and an inner loop.
+								The inner loop performs a few epochs of gradient descent to measure the learning speed while keeping all labels fixed.
+								In the outer loop the distribution of unknown labels (the initial distribution is sampled randomly) is then updated, based on the previously measured learning speed and the weights of the model are reset.
+								After the outer loop converged the maximum a-posteriori estimate of the labels of the unlabelled samples is used to train the network on the fully labelled data set.
+								This algorithm is combined with approaches like entropy minimization and data augmentation to further improve its performance.
+								</p>
+								
+								<p><a href="https://arxiv.org/abs/1902.02336" target="_blank">Jackson et al.</a> (2019) optimize the unknown labels such that the gradient for an unlabelled point \((x_U,y_U\)) is the same as for a similar labelled point \((x_L,y_L\))
+								They introduce a new distance metric, which does not compare data points based on their embeddings as is usually done in deep learning.
+								Instead, data points are mapped into model parameter space \(G\) by using the model's gradient based on the loss function \(L\):
+								$$\phi(x,y) = \nabla_\theta L(\theta, x, y).$$
+								The goal is to minimize the Euclidean distance between the labelled and the unlabelled data in \(G\), i.e. between the gradients of the labelled and the unlabelled data.
+								Since \(\phi(x,y)\) depends on the label \(y\) an optimization problem is defined for the unlabelled samples' labels, i.e. the labels for unlabelled samples are optimized simultaneously with the model parameters.
+								The algorithm first assigns a dummy label to all unlabelled data points (e.g. a zero vector).
+								After this the loss (e.g. cross-entropy) is calculated on a batch of both labelled and unlabelled samples.
+								The loss is then used to optimize the model's parameters and in parallel the labels of the unlabelled samples are updated in order to minimize the Euclidean distance of the gradients between the labelled and the unlabelled samples.
+								</p>
+								
+					</div>
+					
+					
+				</section>
+
+			
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<hr>
+					<h3>Contact</h3>
+					<p><span style="font-weight: bold">TOB [DOT] HINZ [AT] GMAIL [DOT] COM</span><hr</p>
+					<p>Knowledge Technology, Universität Hamburg, Vogt-Koelln-Str. 30, 22527 Hamburg, Germany</p>
+				
+					<ul class="icons">
+						<li><a href="https://www.linkedin.com/in/tobias-hinz-397881123" class="icon fa-linkedin" target="_blank"></a></li>
+						<li><a href="https://github.com/tohinz" class="icon fa-github" target="_blank"></a></li>
+						<li><a href="https://www.inf.uni-hamburg.de/en/inst/ab/wtm/people/hinz.html" class="icon fa-university" target="_blank"></a></li>
+					</ul>
+					
+					<ul class="copyright">
+						<li>&copy; 2019 Tobias Hinz</li>
+						<li>Design: <a href="http://templated.co">TEMPLATED</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="../js/jquery.min.js"></script>
+			<script src="../js/skel.min.js"></script>
+			<script src="../js/util.js"></script>
+			<script src="../js/main.js"></script>
+
+	</body>
+</html>
