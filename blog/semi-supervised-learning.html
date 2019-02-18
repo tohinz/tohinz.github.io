@@ -339,19 +339,6 @@
 								where \(ME\) stands for mutual exclusivity, since this loss trains the model to predict only one class for a given input.
 								</p>
 								
-								<p>This work was further extended by <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a> (2016).
-								In this work the training procedure is extended with some form of stochasticity (e.g. dropout) and the same data sample is sent through the network \(n\) times.
-								Due to the stochasticity this produces \(n\) different outputs \(f_\theta (x_i)\).
-								The unsupervised loss term from the previous work is then extended by also minimizing the squared difference between those different outputs for the same input.
-								As a result, the unsupervised loss function becomes
-								$$L_{unsup}^{TS} = \sum_{x_i}\left [\sum_j\sum_{k\neq j} \vert\vert f_\theta^j(x_i)-f_\theta^k(x_i)\vert\vert_2^2\right ],$$
-								where \(f_\theta^j(x_i)\) is the output of model \(f_\theta\) for the \(j\)-th pass through the network and \(TS\) stands for transformation/stability.
-								This is essentially a consistency based regularization term, discussed more in the next section.
-								The final loss is then a combination of the two previous unsupervised loss functions:
-								$$L_{unsup} = \lambda_1 L_{unsup}^{ME} + \lambda_2 L_{unsup}^{TS},$$
-								where the mutual exclusivity loss is needed to prevent "trivial" outputs for unlabelled data by forcing each prediction vector to be valid, i.e. predict one single class.
-								</p>
-								
 							<h5>Consistency Regularization</h5>
 								<p>In contrast to many graph based methods consistency targets use a <em>learned</em> distance metric implied by the abstract representations of the model and this distance metric can change as the model learns new features.</p>
 								
@@ -367,9 +354,9 @@
 								We then use the teacher's predictions to guide the training of the student on unlabelled data, e.g. by minimizing the difference in predictions between the teacher and the student on unlabelled data points.
 								</p>
 																
-								<p><a href="https://arxiv.org/abs/1412.4864" target="_blank">Bachmann et al.</a> (2014) approach this by creating a pseudo-ensemble of neural networks.
+								<p><a href="https://arxiv.org/abs/1412.4864" target="_blank">Bachmann et al.</a> (2014) approach this by creating a pseudo-ensemble of neural networks (Figure 2, a).
 								This is done by applying stochastic methods (usually <a href="http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf" target="_blank">Dropout</a>).
-								By sampling multiple dropout masks \(\xi_i\) they have multiple "different" networks which are all applied to a given input and will give (slightly) different outputs.
+								By sampling multiple dropout masks \(\xi_i\) they obtain multiple "different" networks which are all applied to a given input and will give (slightly) different outputs.
 								Since the dropout masks are applied directly to the activations at the various layers of the network we can view them as a way of perturbing the learned features (or even the input if applied at the lowest layer).
 								The consistency regularization is then to train the model to have consistent activations and outputs on each layer, which is done by comparing the activations of the unperturbed network (no dropout) and the pseudo-ensemble (networks with dropout applied).
 								Assume that \(f^i_{\theta}(x, \xi)\) represents the activations of the <em>i</em>-th layer of the network when the dropout mask \(\xi\) is applied to all layers < <em>i</em> and \(f^i_{\theta}(x)\) is the output without any dropout.
@@ -381,7 +368,7 @@
 								</p>
 								
 								<p><a href="http://papers.nips.cc/paper/5947-semi-supervised-learning-with-ladder-networks" target="_blank">Rasmus et al.</a> (2015) developed the Ladder Network for semi-supervised learning.
-								A special case of the Ladder Network which does not contain a generative model is the \(\Gamma\)-network (called this way because of its architectural shape).
+								A special case of the Ladder Network which does not contain a generative model is the \(\Gamma\)-network (called this way because of its architectural shape, Figure 2, b).
 								Given any standard feed-forward network the only modification is that one additional layer, the "decoder" is added to pen-ultimate layer of the original network (just before the final classification is made).
 								A given input is then passed through the network twice.
 								The first pass is the "clean" pass, in which the data is not perturbed, while on the second pass some form of noise (usually Gaussian) is added to each layer's activations (and to the input).
@@ -398,7 +385,24 @@
 								The additional layer is then used to predict the teacher prediction given the student prediction.						
 								</p>
 								
-								<p><a href="https://arxiv.org/abs/1610.02242" target="_blank">Laine et al.</a> (2017) introduced the \(\Pi\)-Model and Temporal Ensembling which can be seen as a special case of <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a> work or a simplification of <a href="http://papers.nips.cc/paper/5947-semi-supervised-learning-with-ladder-networks" target="_blank">Rasmus et al.</a>. 
+								<p>Bachmann et al.'s work was further extended by <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a> (2016) (Figure 2, c).
+								Sajjadi et al. also use some form of stochasticity (e.g. dropout) and the same data sample is sent through the network \(n\) times (as opposed to only two times as in Bachmann et al.) and the unsupervised loss term operated only on the last layer's output (as opposed to all layers as in Bachmann et al.).
+								Due to the stochasticity this produces \(n\) different outputs \(f_\theta (x_i)\).
+								The unsupervised loss term the squared difference between those different outputs for the same input.
+								As a result, the unsupervised loss function becomes
+								$$L_{unsup} = \sum_{x_i}\left [\sum_j\sum_{k\neq j} \vert\vert f_\theta^j(x_i)-f_\theta^k(x_i)\vert\vert_2^2\right ],$$
+								where \(f_\theta^j(x_i)\) is the output of model \(f_\theta\) for the \(j\)-th pass through the network and \(TS\) stands for transformation/stability.
+								Furthermore, the entropy based loss from <a href="https://ieeexplore.ieee.org/abstract/document/7532690" target="_blank">Sajjadi et al.</a> is added to further improve the model's performance.
+								</p>
+								
+								<figure>
+								   <img src="../images/SSL/consistency_models.png" alt="Consistency Based SSL Approaches"/>
+								   <figcaption><i>Figure 2: High level overview of the different consistency based SSL approaches discussed in this section.
+								   \(x_i\) are the input samples, \(y_i\) are the accompanying labels (if available), and \(z_i/\hat{z}_i\) are the networks' embeddings for input \(x_i\)</i></figcaption>
+								</figure>
+								<br>
+								
+								<p><a href="https://arxiv.org/abs/1610.02242" target="_blank">Laine et al.</a> (2017) introduced the \(\Pi\)-Model (Figure 2, d) and Temporal Ensembling (Figure 2, e) which can be seen as a special case of <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a> work or a simplification of <a href="http://papers.nips.cc/paper/5947-semi-supervised-learning-with-ladder-networks" target="_blank">Rasmus et al.</a>. 
 								The main idea is to modify the \(\Gamma\)-network by removing the explicit denoising layer and instead applying some form of noise to the teacher predictions, too.
 								Instead of adding noise explicitly to each of the layers as in the \(\Gamma\)-network, Laine et al. apply noise by using stochastic data augmentation (e.g. randomly rotating or cropping the image) and dropout as in  <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a>.
 								In the \(\Pi\)-Model (as in the \(\Gamma\)-network and compared to \(n\) times in  <a href="http://papers.nips.cc/paper/6332-regularization-with-stochastic-transformations-and-perturbations-for-deep-semi-supervised-learning" target="_blank">Sajjadi et al.</a>) a data sample is evaluated twice to get two different outputs \(y\) and \(\hat{y}\) for the same input (due to the stochastic augmentation and different dropout masks).
@@ -415,7 +419,7 @@
 								Compared to the \(\Pi\)-Model this has the advantages that each sample only needs to be evaluated once per epoch and that the predictions from the ensemble of models from previous epochs is likely less noisy.
 								</p>
 								
-								<p>This model was further extended by <a href="http://papers.nips.cc/paper/6719-mean-teachers-are-better-role-models-weight-averaged-consistency-targets-improve-semi-supervised-deep-learning-results" target="_blank">Tarvainen et al.</a> (2017), who introduced the Mean Teacher model.
+								<p>This model was further extended by <a href="http://papers.nips.cc/paper/6719-mean-teachers-are-better-role-models-weight-averaged-consistency-targets-improve-semi-supervised-deep-learning-results" target="_blank">Tarvainen et al.</a> (2017), who introduced the Mean Teacher model (Figure 2, f).
 								Their observation was that the temporal ensembling suffered from two drawbacks: first, the teacher's prediction are only updated once per epoch (i.e. learned information is incorporated slowly) and second, the larger the data set, the longer the span of the updates. 
 								The mean teacher model tries to address these challenges by assembling a better teacher network.
 								The idea is to create the teacher by averaging the model's weights instead of its predictions.
@@ -431,7 +435,7 @@
 								Firstly, this way information is aggregated in the teacher model after every update step, which means there is a faster feedback loop for the teacher and, secondly, the weight updates improve all layers' representations of the teacher and do not just focus on the final output as in temporal ensembling.
 								</p>
 								
-								<p><a href="https://ieeexplore.ieee.org/abstract/document/8417973" target="_blank">Miyato et al.</a> (2017) introduced Virtual Adversarial Training (VAT), which can also be seen as a special case of the \(\Pi\)-Model.
+								<p><a href="https://ieeexplore.ieee.org/abstract/document/8417973" target="_blank">Miyato et al.</a> (2017) introduced Virtual Adversarial Training (VAT, Figure 2, g), which can also be seen as a special case of the \(\Pi\)-Model.
 								While the \(\Pi\)-Model applies random perturbations (e.g. in the form of dropout) to the data VAT applies a specific kind of noise, namely adversarial noise, to the data.
 								Adversarial noise \(\epsilon_{adv}\) is the minimum amount of noise one can apply to a given input such that the network maximally changes its prediction for the input (e.g. by changing its prediction from "dog" to "cat"):
 								$$\epsilon_{adv} = \underset{\epsilon_{adv} < \epsilon}{\text{arg max}}\ D(f_\theta(x), f_\theta(x+\epsilon_{adv})),$$
@@ -443,14 +447,14 @@
 								VAT was also <a href="https://arxiv.org/abs/1605.07725" target="_blank">extended</a> for classification in the text domain where the adversarial perturbations are applied to the continuous word embeddings.
 								</p>
 								
-								<p><a href="https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewPaper/16322" target="_blank">Park et al.</a> (2018) introduced Virtual Adversarial Dropout (VAdD), a combination of VAT and the \(\Pi\)-Model/temporal ensembling.
-								While the \(\Pi\)-Model sends the same data point twice through the same network with two different (randomly samples) dropout masks \(\xi_1\) and \(\xi_2\), VadD samples one dropout mask randomly (\(\xi_1\)) and the second one adversarially (\(\xi_{adv}\)).
+								<p><a href="https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewPaper/16322" target="_blank">Park et al.</a> (2018) introduced Virtual Adversarial Dropout (VAdD, Figure 2, h), a combination of VAT and the \(\Pi\)-Model/temporal ensembling.
+								While the \(\Pi\)-Model sends the same data point twice through the same network with two different (randomly sampled) dropout masks \(\xi_1\) and \(\xi_2\), VadD samples one dropout mask randomly (\(\xi_1\)) and the second one adversarially (\(\xi_{adv}\)).
 								Adversarial dropout is defined similarly to adversarial noise as finding a dropout mask (with the same dropout probability) that maximally changes the network's output for the given input, where
 								$$\xi_{adv} = \underset{\vert\vert\xi_{adv} - \xi_1\vert\vert_2^2 < \epsilon}{\text{arg max}}\ D(f_\theta(x, \xi_1), f_\theta(x,\xi_{adv})).$$
 								As in the other models, the unsupervised loss is then the squared difference between the model outputs for the two different masks: \(\vert\vert f_\theta(x, \xi_1) - f_\theta(x,\xi_{adv})\vert\vert_2^2\) or, alternatively, the Kullback-Leibler divergence between the outputs.
 								</p>
 								
-								<p><a href="https://arxiv.org/abs/1805.09302" target="_blank">Cicek et al.</a> (2018) introduced another version of adversarial learning, namely adversarial weight perturbations.
+								<p><a href="https://arxiv.org/abs/1805.09302" target="_blank">Cicek et al.</a> (2018) introduced another version of adversarial learning, namely adversarial weight perturbations  (Figure 2, i).
 								Similarly to applying adversarial noise to the input (as is done in VAT) we can also apply adversarial noise to the weights \(\theta\) directly:
 								$$\theta_{adv} = \underset{\vert\vert\theta_{adv} - \theta\vert\vert_2^2 < \epsilon}{\text{arg max}}\ D(f_\theta(x), f_{\theta_{adv}}(x)).$$
 								In contrast to adversarial noise on the input, however, the parameters for both minimization and maximization here are both the same, namely the weights \(\theta\).
@@ -458,14 +462,14 @@
 								In ABCD, for each batch of training data we first randomly choose half the weights and perform gradient ascent with a small learning rate.
 								As a second step (on the same batch) we take the remaining weights and perform gradient descent with much larger learning rate.
 								This is straight forward for labelled data, since ABCD can be applied to the standard cross-entropy loss.
-								For unlabelled data ABCD calculated on the entropy loss for the model's two outputs with the two weight parameters \(\xi\) and \(\xi_{adv}\).
+								For unlabelled data ABCD is calculated on the entropy loss for the model's two outputs with the two weight parameters \(\theta\) and \(\theta_{adv}\).
 								To further improve the performance ABCD can be combined with the loss from the VAT approach, leading to adversarial perturbations both on the input (VAT) and on the model's parameters (ABCD).
 								</p>
 								
-								<p><a href="https://link.springer.com/chapter/10.1007/978-3-030-01246-5_17" target="_blank">Chen et al.</a> (2018) replace the teacher network by an external memory module which stores information about previous training iterations.
+								<p><a href="https://link.springer.com/chapter/10.1007/978-3-030-01246-5_17" target="_blank">Chen et al.</a> (2018) replace the teacher network by an external memory module (Figure 2, j) which stores information about previous training iterations.
 								The external memory is similar to a dictionary in which the keys are the learned feature representations of the different classes and the values are the associated prediction uncertainties for the given class.
 								Both the classes' feature representations and the prediction uncertainties are gradually accumulated, i.e. updated throughout the training process.
-								Similarly to temporal ensembling the idea is to not use one single up-to-date network as teacher network, but instead use use the memory (i.e. information from multiple past training iterations) to calculate the unsupervised loss.
+								Similarly to temporal ensembling the idea is to not use one single up-to-date network as teacher network, but instead use the memory (i.e. information from multiple past training iterations) to calculate the unsupervised loss.
 								A CNN is applied to obtain the image embeddings and a prediction vector (by applying the softmax function) for the probability that the image belongs to a certain class.
 								In order to obtain one feature representation for each class the memory module assumes that image embeddings of different classes form clusters in the embedding space.
 								The feature representation for a given class is then the cluster's centroid and the centroids in turn are updated with each training iteration.
@@ -481,7 +485,7 @@
 								If the input is a labelled sample of class \(j\) the memory prediction \(\hat{p}\) is simply the prediction for the given class, i.e. \(\hat{p} = memory[k_j]\).
 								On the other hand, if the input is unlabelled we first compute a weighting for each of the classes based on the image embedding's similarity to each of the centroids and then calculate \(\hat{p}\) as a weighted sum of the different classes' predictions.
 								Again, we have the image embedding \(\hat{x}_i\) from an image \(I\).
-								We then calculate the weighting \(w(m_i\vert I)\) for each memory slot \(m_i = (k_i, v_i)\) and use this to get obtain the prediction \(\hat(p)\):
+								We then calculate the weighting \(w(m_i\vert I)\) for each memory slot \(m_i = (k_i, v_i)\) and use this to get obtain the prediction \(\hat{p}\):
 								$$\hat{p} = \sum_i^K w(m_i\vert I) v_i \text{  with  } w(m_i\vert I) = \frac{e^{-\text{dist}(\hat{x},k_i)}}{\sum_j^K e^{-\text{dist}(\hat{x},k_j)}},$$
 								where \(\text{dist}(\cdot, \cdot)\) denotes the Euclidean distance.
 								With the two predictions \(p\) from the student network and \(\hat{p}\) from the memory (teacher network) we can now calculate the unsupervised loss:
@@ -490,8 +494,8 @@
 								This loss, together with the supervised loss is then used to update the student network.
 								</p>
 								
-								<p><a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Luo_Smooth_Neighbors_on_CVPR_2018_paper.html" target="_blank">Luo et al.</a> (2018) observed that most consistency based approaches only regularize the model to be smooth (consistent) around each data point locally, while ignoring global structure in the data (e.e. manifolds or clusters).
-								Their idea is, therefore, to enforce smoothness not only locally around a given data point, but also between neighbours in the data space.
+								<p><a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Luo_Smooth_Neighbors_on_CVPR_2018_paper.html" target="_blank">Luo et al.</a> (2018) observed that most consistency based approaches only regularize the model to be smooth (consistent) around each data point locally, while ignoring global structure in the data (e.g. manifolds or clusters).
+								Their idea is, therefore, to enforce smoothness not only locally around a given data point, but also between neighbours in the data space (Figure 2, k).
 								This is done by optimizing the image embeddings such that neighbours in the embeddings space such that they are similar to their neighbours and dissimilar for data points that are further away in the data space.
 								Since we assume that close by data points (i.e. data points within a cluster) belong to the same class this means that images that belong to the same class should have similar embeddings and embeddings of images from different classes should be different.
 								Again, the teacher network is a network based on previous training iterations built through temporal ensembling, while the student network is the current, up-to-date network.
@@ -521,14 +525,14 @@
 								Using only the last set of weight for the prediction at test time may therefore not be the best way, since many previous weight setting were equally accurate, but make different predictions and are at different points in weight space.
 								Essentially, the different sets of weights during the final training iterations describe different "views" on the data and using all of them can increase the overall performance.
 								They suggest to make use of the "different" models by using <a href="https://arxiv.org/abs/1803.05407" target="_blank">stochastic weight averaging</a> (SWA) of the different model weights in the last stages of training.
-								SWA averages weights traversed by SGD using a special learning rate schedule which can lean to improved performance in supervised training settings.
+								SWA averages weights traversed by SGD using a special learning rate schedule which can lead to improved performance in supervised training settings.
 								Athiwaratkun et al. change the learning rate schedule and also perform the weight averaging more often per epoch than in the original paper.
 								Finally, by applying SWA to the student networks of the \(\Pi\)-Model and the Mean Teacher with the updated methodology of Athiwaratkun et al. leads to a higher performance than the original models without SWA.
 								</p>
 								
 								<p><a href="https://arxiv.org/abs/1901.05657" target="_blank">Li et al.</a> (2019) note that one of the problems with consistency based approaches is confirmation bias, i.e. the model might learn wrong labels for unlabelled data which might hinder the overall performance.
 								This is because the student model "blindly" learns from the teacher's predictions, regardless of the quality of those predictions.
-								Their idea to mitigate this issue is by introducing a certainty-driven consistency loss (CCL)) which means that the student should take into consideration the teacher's certainty about its predictions.
+								Their idea to mitigate this issue is by introducing a certainty-driven consistency loss (CCL), Figure 2, l) which means that the student should take into consideration the teacher's certainty about its predictions.
 								If the teacher is uncertain about its prediction the student should either not use it at all (filtering CCL) or, alternatively, should assign a lower importance to it (temperature CCL).
 								The methodology for the teacher and the student network is the same as for the Mean Teacher (<a href="http://papers.nips.cc/paper/6719-mean-teachers-are-better-role-models-weight-averaged-consistency-targets-improve-semi-supervised-deep-learning-results" target="_blank">Tarvainen et al.</a>), i.e. the teacher's weights are calculated as an exponential moving average of the student's weights.								
 								Existing consistency based models usually use the teacher's output directly as prediction targets to train the student.
