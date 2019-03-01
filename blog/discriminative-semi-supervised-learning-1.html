@@ -111,7 +111,7 @@
 						</p>
 						
 						<p>We process our image input with some model \(f\) (often a CNN) which has learnable parameters \(&theta;\) and get as output a prediction of the class label \(\hat{Y}\):
-						$$\hat{Y} = f(X;\theta).$$
+						$$\hat{Y} = f_\theta(X).$$
 						In the case of neural networks we usually use some form of gradient descent to optimize the model's parameters.
 						Through this the model parameters \(\theta\) are tweaked so that the model's output \(\hat{Y}\) gets closer to the ground truth labels \(Y\) for a given input \(X\).
 						To use gradient descent we need a loss function \(L\) which we can use to optimize the model's parameters.
@@ -185,6 +185,8 @@
 								The weight (strength) of the connection between two nodes (data points) is based on their similarity.
 								For this we need some kind of distance metric to calculate the distance/similarity between two data points.
 								Given the graph the assumption is then usually that points that have a strong connection are similar, i.e. have the same label.
+								Fig. 2 shows an example of the two-moons data set as a graph.
+								In this example we use the Euclidean distance as distance metric and the line width is proportional to the distance between the points.
 								
 								<figure>
 								   <img src="../images/SSL/graph_based_ssl.png" alt="Graph Based SSL Example"/>
@@ -194,29 +196,29 @@
 								</figure>
 								<br>
 								
-								We can use this for approaches like label propagation, where we can assign labels to unlabelled points based on the labels of their closest neighbours in the graph.
-								One of the early works to use this approach is <a href="https://pdfs.semanticscholar.org/8a6a/114d699824b678325766be195b0e7b564705.pdf" target="_blank">Zhu et al.</a> (2002) who perform label propagation to assign labels to their unlabelled data points.
+								We can use this for approaches like label propagation, where we assign labels to unlabelled points based on the labels of their closest neighbours in the graph.
+								One of the early works to use this approach is by <a href="https://pdfs.semanticscholar.org/8a6a/114d699824b678325766be195b0e7b564705.pdf" target="_blank">Zhu et al.</a> (2002) who perform label propagation to assign labels to their unlabelled data points.
 								They assume a given distance metric (in their case they choose Euclidean distance) and the strength of the connection between data points is proportional to their distance, i.e. data points that are close have a stronger connection than data points that are far apart.
-								The connection weights are then stored in a similarity matrix \(W\), which is a \(n \times n\) matrix for our \(n\) data points, where \(w_{ij}\) is the connection strength between the \(i\)-th and \(j\)-th data point.
-								The entries of \(W\) are then normalized to form transition probabilities \(T\): \(w_{ij} = \frac{w_{ij}}{\sum_k^n w_{kj}}\).
-								Another matrix \(n\times C\) (\(C\) is the number of classes) matrix \(Y\) is defined which contains the labels.
+								The connection weights are stored in a similarity matrix \(W\), which is a \(n \times n\) matrix for our \(n\) data points, where \(w_{ij}\) is the connection strength between the \(i\)-th and \(j\)-th data point.
+								The entries of \(W\) are normalized to form transition probabilities \(T\): \(w_{ij} = \frac{w_{ij}}{\sum_k^n w_{kj}}\) and the matrix \(Y\) of shape \(n\times C\) (\(C\) is the number of classes) is defined which contains the labels.
 								For all labelled data points the corresponding row contains its label (a one-hot vector), while the labels of unlabelled data are initialized with some values (e.g. all zeros).  
 								They then develop a label propagation algorithm in which the labels propagate through the graph based on the transition probabilities.
-								The label propagation algorithm then consists of three steps which are iteratively repeated until convergence.
+								The label propagation algorithm consists of three steps which are iteratively repeated until convergence.
 								First, each node's label gets updated by multiplying the transition probability with all other nodes: \(Y = TY\).
 								Second, \(Y\) is row-normalized to maintain the class probability interpretation.
-								Third, the the labels for the labelled data points are clamped, i.e. reset to the ground truth value (a one-hot vector).
+								Third, the labels for the labelled data points are clamped, i.e. reset to the ground truth value (a one-hot vector).
 								These three steps are repeated until the algorithm converges.
 								They then develop a clever way of how this algorithm can be computed analytically, without having to go through the iterative process.
 								To assign the final labels to the unlabelled data we can take the argmax over each row of \(Y\).
+								This was one of the early works that introduced the concept of graph based SSL.
+								However, this is a transductive approach (i.e. can not handle previously unseen data points) and does not use any deep learning techniques.
 								</p>
 
 								<p><a href="https://link.springer.com/chapter/10.1007/978-3-642-35289-8_34" target="_blank">Weston et al.</a> 2008 extend the label propagation algorithm to the deep learning setting.
 								Again, it requires some predetermined distance metric to calculate the similarity between data points which is used to calculate the similarity matrix similarly to the previous approach before the optimization begins.
-								The similarity matrix \(W\) is then a sparse matrix where \(w_{ij}=1\) if \(x_i\) and \(x_j\) are neighbours and \(w_{ij}=0\) otherwise.
+								In this work the similarity matrix \(W\) is a sparse matrix where \(w_{ij}=1\) if \(x_i\) and \(x_j\) are neighbours and \(w_{ij}=0\) otherwise.
 								There are different approaches of how to build such a similarity matrix based on the given distance metric, but one simple way is to use the \(k\)-nearest neighbours (kNN) approach for this.
 								To calculate the unsupervised loss the Siamese network loss is used: 
-								The unsupervised loss is based on the loss from Siamese networks.
 								$$L_{unsup} = \begin{cases}
 							 			\vert\vert f_\theta(x_i)-f_\theta(x_j)\vert\vert^2 & \text{if } w_{ij} = 1 \\
 							 			max(0, m-\vert\vert f_\theta(x_i)-f_\theta(x_j)\vert\vert )^2 & \text{if } w_{ij} = 0

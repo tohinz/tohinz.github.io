@@ -591,7 +591,9 @@ gO6tITM7NAAAAABJRU5ErkJggg==
 "
        preserveAspectRatio="none"
        height="360"
-       width="360" />
+       width="360"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <image
        y="692.36218"
        x="720"
@@ -1574,7 +1576,9 @@ GIZRCwsgDMMwjFpYAGEYhmHU8v8PintuxYSodgAAAABJRU5ErkJggg==
 "
        preserveAspectRatio="none"
        height="360"
-       width="360" />
+       width="360"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <image
        y="692.36218"
        x="0"
@@ -1923,6 +1927,8 @@ QAAAQAgGCAAACMEAAQAAIRggAAAg5D95jiz2H17P2AAAAABJRU5ErkJggg==
 "
        preserveAspectRatio="none"
        height="360"
-       width="360" />
+       width="360"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>
