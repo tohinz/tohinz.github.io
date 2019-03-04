@@ -55,8 +55,8 @@
 					<div class="container 75%" align="justify">
 						<h4>Disclaimer</h4>
 						<p><em>This series is about current approaches to discriminative semi-supervised learning (SSL) for image classification with deep neural networks.
-						We leave out a lot of the related work of SSL in combination with other approaches such as Support Vector Machines, Decision Trees, and other traditional approaches.
-						For a more complete overview of SSL in general check out other excellent reviews, e.g. by <a href="https://www.molgen.mpg.de/3659531/MITPress--SemiSupervised-Learning.pdf" target="_blank">Olivier Chapelle et al.</a> and <a href="http://legacydirs.umiacs.umd.edu/~hal/courses/2011F_ML/out/ssl_survey.pdf" target="_blank">Xiaojin Zhu</a>
+						We leave out a lot of the related work of SSL in combination with other approaches such as Support Vector Machines, Decision Trees, and other traditional approaches, as well as SSL approaches for text processing and natural language understanding.
+						For a more detailed overview of SSL in general check out other excellent reviews, e.g. by <a href="https://www.molgen.mpg.de/3659531/MITPress--SemiSupervised-Learning.pdf" target="_blank">Olivier Chapelle et al.</a> and <a href="http://legacydirs.umiacs.umd.edu/~hal/courses/2011F_ML/out/ssl_survey.pdf" target="_blank">Xiaojin Zhu</a>
 						</em></p>
 					</div>
 					
@@ -91,7 +91,7 @@
 						</p>
 						
 						<figure>
-						   <img src="../images/SSL/two_moons.png" alt="SSL Example"/>
+						   <img src="../images/blog/SSL/two_moons.png" alt="SSL Example"/>
 						   <figcaption><i>Figure 1: The leftmost image shows our available data, in which two samples are labelled (see the two small coloured dots).
 						   The image in the middle shows a possible decision boundary of a classifier that only gets the two labelled samples for training.
 						   The rightmost image shows a possible (better?) decision boundary of a model that can also make use of the unlabelled data during its training.</i></figcaption>
@@ -176,33 +176,49 @@
 							We will first describe in more detail some <strong>graph</strong> and <strong>entropy based</strong> approaches.
 							<strong>Graph based approaches</strong> work under the assumption that similar points in the data space (based on some predefined distance metric) should have the same label.
 							<strong>Entropy based approaches</strong> encourage the model to make very confident predictions about all data points, regardless of whether labels are available or not.
-							Future blog posts of this series will focus on other approaches, such as consistency based approaches or co-training.
+							<strong>Future blog posts of this series will focus on other approaches, such as consistency based approaches or co-training.</strong>
 							</p>
 						
-							<h5>Graph Based / Label Propagation</h5>
+							<h5>Graph Based</h5>
 								<p>Graph based approaches build a fully connected graph using the labelled and unlabelled data points.
 								Nodes in the graph are the data points and connections between the nodes are usually undirected.
 								The weight (strength) of the connection between two nodes (data points) is based on their similarity.
 								For this we need some kind of distance metric to calculate the distance/similarity between two data points.
-								Given the graph the assumption is then usually that points that have a strong connection are similar, i.e. have the same label.
+								Given the graph the assumption is then usually that points that have a strong connection (i.e. that are close to each other) are similar and, therefore, have the same label.
 								Fig. 2 shows an example of the two-moons data set as a graph.
 								In this example we use the Euclidean distance as distance metric and the line width is proportional to the distance between the points.
+								We can see that, for this simple data set, the vast majority of (strong) connections are between samples of the same class.
+								</p>
 								
 								<figure>
-								   <img src="../images/SSL/graph_based_ssl.png" alt="Graph Based SSL Example"/>
+								   <img src="../images/blog/SSL/graph_based_ssl.png" alt="Graph Based SSL Example"/>
 								   <figcaption><i>Figure 2: Examples of the two moon data set, where data points are connected by lines whose width is proportional to the distance.
 								   The leftmost figure shows each point connected to its closes neighbour, the figure in the middle shows each point connected to its closest five neighbours, and the right figure shows each point connected to its closest ten neighbours.
 								   Black lines are connections between points of the same class, red lines are connections between points of different classes.</i></figcaption>
 								</figure>
 								<br>
 								
+								<p>
+								Most of the graph based approaches represent the connections by a similarity matrix \(W\) which is a \(n \times n\) matrix for our \(n\) data points, where the entry \(w_{ij}\) is a number that represents the strength of the connection between the two data samples \(w_i\) and \(w_j\).
+								If we only have four data points and use the Euclidean distance as distance measure, the initial similarity matrix \(W\) could look something like this:
+								$$W = \begin{bmatrix}0 & 1.38 & 0.67 & 1.03\\
+															1.38 & 0 & 1.02 & 0.67\\
+															0.67 & 1.02 & 0 & 1.06\\
+															1.03 & 0.67 & 1.06 & 0\\\end{bmatrix}$$
+								Often, the entries of \(W\) are normalized to obtain a probabilitic measurement of the similarities \(T\): \(w_{ij} = \frac{w_{ij}}{\sum_k^n w_{kj}}\).
+								If we do this to the matrix from above we get as result:
+								$$T = \begin{bmatrix}0 & 0.45 & 0.22 & 0.33\\
+															0.45 & 0 & 0.33 & 0.22\\
+															0.25 & 0.37 & 0 & 0.38\\
+															0.37 & 0.25 & 0.38 & 0\\\end{bmatrix}$$
+								</p>
+								
+								<p>
 								We can use this for approaches like label propagation, where we assign labels to unlabelled points based on the labels of their closest neighbours in the graph.
 								One of the early works to use this approach is by <a href="https://pdfs.semanticscholar.org/8a6a/114d699824b678325766be195b0e7b564705.pdf" target="_blank">Zhu et al.</a> (2002) who perform label propagation to assign labels to their unlabelled data points.
-								They assume a given distance metric (in their case they choose Euclidean distance) and the strength of the connection between data points is proportional to their distance, i.e. data points that are close have a stronger connection than data points that are far apart.
-								The connection weights are stored in a similarity matrix \(W\), which is a \(n \times n\) matrix for our \(n\) data points, where \(w_{ij}\) is the connection strength between the \(i\)-th and \(j\)-th data point.
-								The entries of \(W\) are normalized to form transition probabilities \(T\): \(w_{ij} = \frac{w_{ij}}{\sum_k^n w_{kj}}\) and the matrix \(Y\) of shape \(n\times C\) (\(C\) is the number of classes) is defined which contains the labels.
-								For all labelled data points the corresponding row contains its label (a one-hot vector), while the labels of unlabelled data are initialized with some values (e.g. all zeros).  
-								They then develop a label propagation algorithm in which the labels propagate through the graph based on the transition probabilities.
+								They construct the similarity matrix as we described above and have an additional matrix \(Y\) of shape \(n\times C\) (\(C\) is the number of classes) which contains the labels.
+								For all labelled data points the corresponding row of \(Y\) contains its label (a one-hot vector), while the labels of unlabelled data are initialized with some values (e.g. all zeros).  
+								They then develop a label propagation algorithm in which the labels propagate through the graph based on the transition probabilities which are defined as in \(T\).
 								The label propagation algorithm consists of three steps which are iteratively repeated until convergence.
 								First, each node's label gets updated by multiplying the transition probability with all other nodes: \(Y = TY\).
 								Second, \(Y\) is row-normalized to maintain the class probability interpretation.
@@ -210,45 +226,71 @@
 								These three steps are repeated until the algorithm converges.
 								They then develop a clever way of how this algorithm can be computed analytically, without having to go through the iterative process.
 								To assign the final labels to the unlabelled data we can take the argmax over each row of \(Y\).
+								
+								<figure>
+								   <img src="../images/blog/SSL/label_propagation.png" alt="Label Propagation SSL Example" width="100%"/>
+								   <figcaption><i>Figure 3: Examples of the two moon data set with label propagation. Our data set consists of two classes with 10 samples each.
+								   The left image of each pair shows our initial labelled samples (three per class), while the right image of each pair shows the result of the label propagation algorithm.
+								   As we can see, the initial labels can have a big impact on the final result.</i></figcaption>
+								</figure>
+								<br>
+								
 								This was one of the early works that introduced the concept of graph based SSL.
 								However, this is a transductive approach (i.e. can not handle previously unseen data points) and does not use any deep learning techniques.
+								Additionally, the success of the algorithm is highly dependent on the initial label distribution (see e.g. Fig. 3) and the analytic solution involves calculating the inverse of a matrix, which becomes very expensive for larger data sets.
 								</p>
 
-								<p><a href="https://link.springer.com/chapter/10.1007/978-3-642-35289-8_34" target="_blank">Weston et al.</a> 2008 extend the label propagation algorithm to the deep learning setting.
+								<p><a href="https://link.springer.com/chapter/10.1007/978-3-642-35289-8_34" target="_blank">Weston et al.</a> (2008) extend the label propagation algorithm to the deep learning setting.
 								Again, it requires some predetermined distance metric to calculate the similarity between data points which is used to calculate the similarity matrix similarly to the previous approach before the optimization begins.
 								In this work the similarity matrix \(W\) is a sparse matrix where \(w_{ij}=1\) if \(x_i\) and \(x_j\) are neighbours and \(w_{ij}=0\) otherwise.
+								As a result, the similarity matrix could look something like this:
+								$$W = \begin{bmatrix}1 & 0 & 1 & 0\\
+															0 & 1 & 0 & 1\\
+															1 & 0 & 1 & 0\\
+															0 & 1 & 0 & 1\\\end{bmatrix}$$
 								There are different approaches of how to build such a similarity matrix based on the given distance metric, but one simple way is to use the \(k\)-nearest neighbours (kNN) approach for this.
-								To calculate the unsupervised loss the Siamese network loss is used: 
+								Based on our distance metric we assign the \(k\) closest data samples (in embedding space \(f_\theta(x_i)\)) as neighbours (\(w_{ij}\) = 1) and all other samples are not neighbours (\(w_{ij}\) = 0).
+								Additionally, for all labelled data points each point is a neighbour of all other points belonging to the same class.
+								To calculate the unsupervised loss different losses are tested, which give varying results based on the network architecture.
+								One of the most successful ones is the Siamese network loss applied directly to one of the network's embeddings, i.e. to the \(i\)'th layer.
+								It is defined as: 
 								$$L_{unsup} = \begin{cases}
 							 			\vert\vert f_\theta(x_i)-f_\theta(x_j)\vert\vert^2 & \text{if } w_{ij} = 1 \\
 							 			max(0, m-\vert\vert f_\theta(x_i)-f_\theta(x_j)\vert\vert )^2 & \text{if } w_{ij} = 0
-							 			\end{cases}.$$
+							 			\end{cases}$$
+							 	and encourages embeddings of neighbours to be close to each other, while embeddings of non-neighbours should have a distance of at least \(m\).
 							 	The algorithm then first picks a random labelled sample and optimizes the supervised loss.
 							 	Then, first a random pair of neighbours is picked and the unsupervised loss is optimized, before a random pair of non-neighbours is picked and the unsupervised loss is optimized again.
-							 	The unsupervised loss forces neighbours to be close together in the embedding space (i.e. form a cluster), while forcing non-neighbours to have a distance of at least \(m\) in the embedding space.
-							 	The key point here is that the unsupervised loss works directly on the embeddings from our model and not on the input data or labels.
+							 	The key point here is that the unsupervised loss and the construction of the similarity matrix work directly on the embeddings from our model and not on the input data or labels as in previous approaches as e.g. label propagation.
+							 	This approach is tested on the <a href="http://yann.lecun.com/exdb/mnist/" target="_blank">MNIST</a> data set, achieving an overall best accuracy of 92.25% with 100 labelled data points and a CNN architecture. 
 								</p>
 								
-								<p><a href="https://arxiv.org/abs/1611.01449" target="_blank">Hoffer et al.</a> (2016) take this one step further by also learning the distance function and iteratively updating the graph and similarity matrix during training.
-								The distance here is not the Euclidean distance between data inputs anymore, but instead is the Euclidean distance between the embeddings \(f_\theta(x_i)\).
-								They then introduce two kinds of unsupervised losses.
-								The first part of the loss forces the model to build clusters in the embedding space (i.e. embeddings of the same class should be closer to each other than to embeddings of any other class) by minimizing the cross-entropy between the distance distribution and the embeddings.
-								This means that any two samples \(x_i, x_j\) belonging to the same class should have a smaller distance in the embedding space than to any other sample \(x_k\) from a different class: 
+								<p><a href="https://arxiv.org/abs/1611.01449" target="_blank">Hoffer et al.</a> (2016) take this one step further and optimizes the similarity distances directly.
+								The goal is to optimize the data embeddings such that labelled samples of the same class form clusters and that embeddings of unlabelled samples are close to one of the clusters of the labelled embeddings.
+								As in the previous approach, the distance is the Euclidean distance between the embeddings \(f_\theta(x_i)\).
+								
+								The similarity values for a given sample \(x_i\) are then calculated with respect to a set of labelled samples \((z_1, ..., z_C)\) and are represented as a discrete distribution for the probability of the sample \(x_i\) belonging to any of the given classes \(C\):
+								$$P(x_i; z_1, ..., z_C)_k = \frac{e^{-\vert\vert f_\theta(x_i)-f_\theta(z_k)\vert\vert^2}}{\sum_j^C e^{-\vert\vert f_\theta(x_i)-f_\theta(z_j)\vert\vert^2}}, k\in\{1...C\}.$$
+								This assigns a probability \(P(x_i; z_1, ..., z_C)_k\) for sample \(x_i\) to be classified as belonging to class \(k\) under a 1-nn classification rule when \(z_1, ..., z_C\) neighbours are given.
+								
+								The optimization takes place on this similarity distribution \(P(x_i; z_1, ..., z_C)\).
+								For two labelled samples \(x_i, x_j\) belonging to the same class we want them to have a smaller distance in the embedding space than to any other sample \(x_k\) from a different class: 
 								$$\vert\vert f_\theta(x_i)-f_\theta(x_j)\vert\vert_2 < \vert\vert f_\theta(x_i)-f_\theta(x_k)\vert\vert_2.$$
-								The second part is the unsupervised loss and is there to reduce the overlap in clusters in the embedding space of unlabelled data by reducing the entropy of the distance distribution.
+								Consequently, the first part of the loss (supervised) forces the model to build clusters in the embedding space (i.e. embeddings of the same class should be closer to each other than to embeddings of any other class) by minimizing the cross-entropy between the similarity distribution and the known, correct distribution.
+								The correct distribution is the one-hot vector encoding the label and we can use this to minimize the cross-entropy between the one-hot vector and our similarity distribution \(P(x_i; z_1, ..., z_C)\): 
+								$$L_{sup} = H(\text{one-hot label}, P(x_i; z_1, ..., z_C)$$
+								
+								The second part is the unsupervised loss and is there to reduce the overlap in clusters in the embedding space of unlabelled data by reducing the entropy of the similarity distribution.
 								This means that the embedding of an unlabelled sample should be close to a given cluster of labelled samples, but far away from every other cluster.
-								So for a given unlabelled sample \(x_i\) and labelled samples \(z_l, z_k\) belonging to classes \(l\) and \(k\in C\setminus\{l\}\) respectively there exists a class \(l\) such that:
-								$$\vert\vert f_\theta(x_i) - f_\theta(z_l)\vert\vert_2 \ll \vert\vert f_\theta(x_i) - f_\theta(z_k)\vert\vert_2.$$
-								The similarity matrix for a given sample \(x_i\) is then calculated in the embedding space with respect to a set of labelled samples \((z_1, ..., z_C)\) and is represented as a discrete distribution for the probability of the sample \(x_i\) belonging to any of the given classes \(C\):
-								$$P(x_i; z_1, ..., z_C)_i = \frac{e^{-\vert\vert f_\theta(x_i)-f_\theta(z_i)\vert\vert^2}}{\sum_j^C e^{-\vert\vert f_\theta(x_i)-f_\theta(z_j)\vert\vert^2}}.$$
-								\(P\) is then be used to calculate the two parts of the unsupervised loss.
-								The first part of the unsupervised loss is calculated as the cross-entropy of \(P\), a labelled sample \(x_i\) and a set of labelled samples \(z_1, ..., z_C\):
-								$$L_{sup} = H(I(x_l), P(x_l; z_1, ..., z_C)),$$
-								where \(I(x_l)\) is the one-hot vector encoding the label of \(x_l\).
-								The second part of the loss can be calculated on both labelled and unlabelled data points and is simply the entropy of the distance distribution:
+								For a given unlabelled sample \(x_i\) there exists a labelled sample \(z_l\) which belongs to class \(l\in C\) such that
+								$$\vert\vert f_\theta(x_i) - f_\theta(z_l)\vert\vert_2 \ll \vert\vert f_\theta(x_i) - f_\theta(z_k)\vert\vert_2,$$
+								for all other labelled samples \(z_k\) belonging to classes \(k\in C\setminus\{l\}\).
+								The second part of the loss can be calculated on both labelled and unlabelled data points and is simply the entropy of the similarity distribution:
 								$$L_{unsup} = H(P(x_i; z_1, ..., z_C)).$$
-								In practice the algorithm randomly samples a set of labelled samples \(z_1, ..., z_{\vert C\vert}\) at each iteration and uses these samples to calculate the distance distribution \(P\) for the rest of the data points in the current batch.
-								The final model can then be used together with the kNN algorithm in the embedding space to classify new data points.								
+
+								In practice the algorithm randomly samples a set of labelled samples \(z_1, ..., z_{\vert C\vert}\) at each iteration and uses these samples to calculate the similarity distribution \(P\) for the rest of the data points in the current batch.
+								The final model can then be used together with the kNN algorithm in the embedding space to classify new data points.
+								This considerably improves the performance, e.g. achieving an overall best accuracy of 99.22% on the MNIST data set with 100 labelled samples and 79.7% on the <a href="https://www.cs.toronto.edu/~kriz/cifar.html" target="_blank">CIFAR-10</a> data set with 4000 labelled samples.						
 								</p>
 								
 								<p><a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeusser_Learning_by_Association_CVPR_2017_paper.pdf" target="_blank">Haeusser et al.</a> (2017) introduce learning by association.
@@ -258,34 +300,31 @@
 								The transition between embeddings, i.e. the decision which labelled or unlabelled embedding should be visited based on the current embedding is based on a transition probability which is obtained from a similarity measure between embeddings.
 								The goal is to optimize the embeddings in a way that maximizes the probabilities of correct cycles, i.e. walks that start and finish within the same class.
 								At train time labelled and unlabelled samples \(x_L\) and \(x_U\) are sampled and their embeddings \(z_L\) and \(z_U\) are obtained via a CNN.
-								The similarity \(m_{ij}\) between two embeddings \(x_i\) and \(x_j\) is calculated as the dot product: \(m_{ij} = x_i\cdot x_j\).
-								The transition probability \(w_{ij}\) between the two embeddings is then calculated by softmaxing the embeddings:
+								The similarity \(m_{ij}\) between two embeddings \(z_i\) and \(z_j\) is calculated as the dot product: \(m_{ij} = x_i\cdot x_j\).
+								The transition probability \(w_{ij}\) between the two embeddings is then calculated by softmaxing the embeddings (similarly to the approach by <a href="https://pdfs.semanticscholar.org/8a6a/114d699824b678325766be195b0e7b564705.pdf" target="_blank">Zhu et al.</a>):
 								$$w_{ij} = \frac{e^{m_{ij}}}{\sum_j e^{m_{ij}}}.$$
 								The round trip probability \(P^{ikj}\) of starting at embedding \(z_i\) and ending at embeddings \(z_j\) can then be calculated as:
 								$$P^{ikj} = \sum_k w_{ik}w_{kj},$$
 								and the round trip probability of a correct walk is:
-								$$P(correct walk) = \frac{1}{\vert A\vert}\sum_{i\sim j}P^{ikj},$$
+								$$P(\text{correct walk}) = \frac{1}{\vert A\vert}\sum_{i\sim j}P^{ikj},$$
 								where \(i\sim j \leftrightarrow \text{class}(z_i) = \text{class}(z_j)\) and \(\vert A\vert\) is the number of labelled samples in the batch.
 								These probabilities are then used to construct two unsupervised losses.
 								The first unsupervised loss, called the walker loss, penalizes incorrect walks and encourages a uniform probability for all walks back to the correct class.
 								It optimizes the cross-entropy between the uniform probability of correct cycles T and the respective cycle probabilities:
 								$$L_{unsup}^{walker} = H(T,P^{ikj}),$$
-								where \(T\) is the uniform target distribution which is \(\frac{1}{\vert c\vert}\) if class(\(z_i\))=class(\(z_j\)) and \(0\) otherwise where \(\vert c\vert\) is the number of occurences of class \(c\in \{1,...,C\}\).
-								There might be some unlabelled embeddings that represent difficult to classify data.
-								The unsupervised visit loss minimizes the cross-entropy between the uniform target distribution \(V\) and the visit probabilities \(P^{visit})\).
+								where \(T\) is the uniform target distribution which is \(\frac{1}{\vert c\vert}\) if class(\(z_i\))=class(\(z_j\)) and \(0\) otherwise and \(\vert c\vert\) is the number of occurences of class \(c\in \{1,...,C\}\).
+								However, there might be some unlabelled embeddings that represent difficult to classify data.
+								The second unsupervised loss, called the visit loss, therefore minimizes the cross-entropy between the uniform target distribution \(V\) and the visit probabilities \(P^{visit}\).
 								This encourages the model to use all unlabelled embeddings instead of only using "easy" embeddings for its cycles:
 								$$L_{unsup}^{visit} = H(V, P^{visit}),$$
 								where \(P^{visit}_k = \langle P^{ik}\rangle_i\) are the probabilities of visiting unlabelled embedding \(z_k\) from some labelled embedding \(z_i\) and and \(V = \langle\frac{1}{\vert B\vert}\rangle_k\) with \(\vert B\vert\) being the number of unlabelled samples in the batch.
 								These two loss functions are then combined with the supervised loss in order to make use from both the labelled and unlabelled embeddings.
+								This approach achieves an overall best accuracy of 99.11% on the MNIST data set with 100 labels and 94.86% on the <a href="http://ufldl.stanford.edu/housenumbers/" target="_blank">SVHN</a> data set with 1000 labelled samples.
 								</p>
 								
-								<p><a href="https://arxiv.org/abs/1806.02679" target="_blank">Kamnitsas et al.</a> (2018) create a graph over the data's embeddings \(f_\theta(x)\) to model the data manifold.
-								The embeddings are then regularized to make the graph more favourable for class separation by increasing the inter-class distance in the data embeddings.
-								The main intuition is that the embedding space for data samples should already cluster the data, where data with the same label should be in the same cluster and all data points within a cluster should be of the same class.
-								Their approach is similar to the one by <a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeusser_Learning_by_Association_CVPR_2017_paper.pdf" target="_blank">Haeusser et al.</a> we previously talked about.
-								The main difference is that Kamnitsas et al. allow longer walks in the embeddings space.
+								<p>Finally, <a href="https://arxiv.org/abs/1806.02679" target="_blank">Kamnitsas et al.</a> (2018) try to increase the inter-class distance of the embeddings in order to make the graph more favourable for class separation.
+								Their approach is similar to the one by <a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeusser_Learning_by_Association_CVPR_2017_paper.pdf" target="_blank">Haeusser et al.</a> we previously talked about with the main difference that Kamnitsas et al. allow longer walks in the embeddings space.
 								While Haeusser et al. only had a short walk from labelled to unlabelled embedding and back, Kamnitsas et al. allow walks of arbitrary length and their walks are not restricted to alternate between labelled and unlabelled embeddings.
-								The graph is used to capture the structure of the embeddings in the latent space.
 								At each training iteration labelled and unlabelled data points \(x_L\) and \(x_U\) are sampled and the model embeds them into feature space \(z=f_\theta(x)\).
 								Then, a fully connected graph is built, where each embedding is connected to every other embedding.
 								The weight of each connection is based on the similarity of the two embeddings: \(w_{ij} = e^{p(z_i,z_j)}\), where \(p\) is a similarity score, e.g. the Euclidean distance.
@@ -294,67 +333,86 @@
 								One important note here is that the analytic solution for label propagation by Zhu et al. is differentiable, which is an important condition for the rest of the algorithm.
 								However, instead of using these estimated labels for inference or to train the classifier, they are only used to capture the arrangement of clusters in the latent space in order to subsequently optimize this arrangement.
 								The goal is to optimize this arrangement so that it forms one single cluster per class.
-								To achieve this state, the transition probabilities between any two samples of a given class should be the same, while they should be zero for any inter-class transitions.
+								To achieve this state, the transition probabilities \(w_{ij}\) between any two samples of a given class should be the same, while they should be zero for any inter-class transitions.
 								This can be expressed by a (soft) constraint on the transition probabilities \(w_{ij}\):
 								$$w_{ij} = \sum_c^C z_i^c\frac{z_j^c}{m^c},\ \ m^c = \sum_i z_i^c,$$
 								where \(z_i^c\) is the posterior probability for node \(i\) to belong to class \(c\) after label propagation, and \(m^c\) is the expected mass assigned to class \(c\).
 								To encourage \(z\) to form clusters we can therefore minimize the cross-entropy between the ideal transition matrix (that adheres to the above constraint) and the current transition matrix.
 								$$\hat{L}_{unsup} = \frac{1}{N^2}\sum_{i,j}^N -\hat{w}_{ij} \text{ log}(w_{ij}),$$
-								where \(\hat{w}\) are the ideal transition probabilities and \(w\) are the current transition probabilities.
+								where \(\hat{w}_{ij}\) are the ideal transition probabilities and \(w_{ij}\) are the current transition probabilities.
 								This loss is further adapted to include the intuition that existing clusters should not be disturbed during optimization.
-								Therefore, the loss is further designed in a way so that it attracts points of the same class along the graphs connections.
-								To do this the loss models a Markov chain of multiple transitions between data points in the graph.
+								To do this the loss models a Markov chain of multiple transitions ("walks" in Haeusser et al.'s work) between data points in the graph.
 								Transitioning between data points of the same class should have a high probability (since they are close by in the same cluster), while transitioning to points of another class should have a low probability.
-								To calculate the probability \(m_{ij}\) that two nodes belong to the same class we can again use the class posterior estimations from the label propagation algorithm and calculate their dot product: \(m_{ij} = z_i\cdot z_j\).
-								The joint probability of transitioning from node \(i\) to node \(j\) can then be calculated as \(w_{ij}m_{ij}\)
+								To calculate the probability \(m_{ij}\) that two nodes belong to the same class we can again use the class posterior estimations from the label propagation algorithm and calculate their dot product: \(m_{ij} = z_i\cdot z_j\) (as done by Haeusser et al.).
+								The joint probability of transitioning from node \(i\) to node \(j\) can then be calculated as \(w_{ij}m_{ij}\).
 								Let \(W\) be the transition matrix containing all \(w_{ij}\), \(\hat{W}\) be the ideal transition matrix, and \(M\) be the matrix containing all \(m_{ij}\).
 								We can then calculate the probability of a Markov process to start at node \(i\), perform \((s-1)\) transitions between nodes of the same class and then end at any node \(j\) as the element \(W_{ij}^s\), with \(W_{ij}^s = (W\circ M)^{s-1}W\), where \(\circ\) denotes the elementwise product.
 								The final unsupervised loss then optimizes \(W^s\) to be similar to the ideal transition probabilities \(\hat{W}\):
 								$$L_{unsup} = \frac{1}{S}\sum_s^S\frac{1}{N^2}\sum_{i,j}^N -\hat{W_{ij}}\text{ log}W_{ij}^s,$$
 								where \(S\) is the maximum number of Markov steps that are performed and the unsupervised loss is optimized jointly with the supervised loss (the cross-entropy loss on labelled samples).
+								This approach achieves accuracies of 99.25% on the MNIST data set (100 labels), 94.31% on the SVHN data set (1000 labels), and 81.43% on the CIFAR-10 data set (4000 labels).
+								</p>
+								
+								<p>This concludes our section about graph based SSL approaches.
+								They all have in common that they use a similarity measurement between data embeddings to optimize the embeddings.
+								The intuition is that data points belonging to the same class should have similar embeddings (supervised loss) and that similar embeddings should belong to the same class and ideally be close to exactly one cluster of labelled data point embeddings (unsupervised loss).
+								We now continue with entropy based approaches for SSL.
 								</p>
 													
 							<h5>Entropy based</h5>
 								<p>Entropy based models force models to be confident about their predictions.
 								This is achieved by minimizing the model predictions' entropy.
 								Since the predictions' entropy can be minimized without access to ground truth labels to compare against we can apply entropy minimization directly to the model's output for both labelled and unlabelled data.
-								One of the first works on this concept was done by <a href="http://papers.nips.cc/paper/2740-semi-supervised-learning-by-entropy-minimization" target="_blank">Grandvalet et al.</a> (2004).
+								One of the first works based on this concept was done by <a href="http://papers.nips.cc/paper/2740-semi-supervised-learning-by-entropy-minimization" target="_blank">Grandvalet et al.</a> (2004).
 								In this case the unsupervised loss term is the entropy of predictions for the unlabelled data:
 								$$L_{unsup} = \lambda\sum_i f_\theta (x_i) \text{ log}f_\theta(x_i),$$
 								for unlabelled input data \(x_i\), a model \(f\) with parameters \(\theta\), and \(\lambda\) weighting the influence of the unsupervised loss term.
 								Interestingly, <a href="https://openreview.net/forum?id=HyhbYrGYe" target="_blank">Pereyra et al.</a> (2017) showed that the exact opposite, namely penalizing outputs that are too confident, can be a powerful regularizer for supervised learning.
 								</p>
 								
-								<p>Pseudo labelling, sometimes also called self-training or incremental training is one of the most straight forward ways of doing SSL and can be seen as a special way to minimize the entropy of the model's predictions.
-								<a href="https://ieeexplore.ieee.org/abstract/document/4129456" target="_blank">Rosenberg et al.</a> (2005) used this approach.
+								<p>Pseudo labelling, sometimes also called self-training or incremental training, is one of the most straight forward ways of doing SSL and can be seen as a special way to minimize the entropy of the model's predictions and was used by <a href="https://ieeexplore.ieee.org/abstract/document/4129456" target="_blank">Rosenberg et al.</a> (2005).
 								In its simplest form a classifier is trained on the labelled subset of data and then makes predictions on the unlabelled subset.
 								Then, the subset of unlabelled data for which the classifier is very confident in its prediction (e.g. low entropy in its output) is added to the labelled data set, together with the labels predicted by the classifier.
 								The classifier is then again trained on the (now larger) labelled data set and this process is repeated iteratively.
 								This approach faces some problems though, such as adding wrong samples to the labelled data set which can hinder or even negatively affect the training process.
-								<a href="https://pdfs.semanticscholar.org/798d/9840d2439a0e5d47bcf5d164aa46d5e7dc26.pdf" target="_blank">Lee</a> (2013) extended this approach to the deep learning approach.
+								<a href="https://pdfs.semanticscholar.org/798d/9840d2439a0e5d47bcf5d164aa46d5e7dc26.pdf" target="_blank">Lee</a> (2013) extended this approach to the deep learning approach and achieved an accuracy of 83.85% on the MNIST data set (100 labels).
 								Since pseudo labelling encourages the model's predictions to be one-hot vectors in the long run (by adding predictions with high confidence as class labels to the supervised data set), this is effectively one of the early ways of entropy based SSL.
 								</p>
 
-								<p>
-								problem: high capacity model might just overfit to the data
-								</p>
-								
 								<p><a href="https://ieeexplore.ieee.org/abstract/document/7532690" target="_blank">Sajjadi et al.</a> (2016) took this approach to an extreme by adding an unsupervised loss term that forces the model's output to be close to a one-hot vector, i.e. 1 for the correct class and 0 for every other class.
 								This is essentially a different way of enforcing a low entropy on the output, by adding a prior on the model output.
-								Let \(f_j(x_i)\) be the \(j\)-th output unit of the model's prediction for \(x_i\), i.e. if \(x_i\) belongs to class \(k\in\{1, ..., K\}\):
-								$$f_j(x_i) = \begin{cases}
-							 			1 & \text{if}\ j = k, \\
-							 			0 & \text{if}\ j \neq k
-							 			\end{cases}.$$
-								The original loss function would be then be a Boolean function with disjunction and conjunction which outputs "True" (1) if the output is of valid form and "False" (0) otherwise:
-								$$\hat{L}_{unsup} = \lor_{j=1}^K (\land_{k=1, k\neq j}^K \lnot f_k\land f_j)$$
+								Let \(f_j(x_i)\) be the \(j\)-th output unit of the model's prediction for \(x_i\) and \(C\) be the number of classes in our training set.
+								To enforce the output to resemble a one-hot vector one can design a Boolean function with disjunction and conjunction which outputs "True" (1) if the output is of valid form (one-hot) and "False" (0) otherwise:
+								$$\hat{L}_{unsup} = \lor_{j=1}^C (\land_{c=1, c\neq j}^C \lnot f_c\land f_j)$$
 								However, it is not straight forward to impose this prior in a loss function that has derivatives, which is necessary to optimize the model with a gradient descent algorithm.
 								They get around this by approximating the loss function with a differentiable function. 
-								The conjunction of a set of binary variables \(\land_{i=1}^K\) is replaced by their product \(\prod_{i=1}^K x_i\), the \(not\)-operation \(\lnot x_i\) is replaced by \(1-x_i)\), and the disjunction of binary variables \(\lor_{i=1}^K x_i\) is replaced with their sum \(\sum_{i=1}^K x_i\).
+								The conjunction of a set of binary variables \(\land_{i=1}^C\) is replaced by their product \(\prod_{i=1}^C x_i\), the not-operation \(\lnot x_i\) is replaced by \((1-x_i)\), and the disjunction of binary variables \(\lor_{i=1}^C x_i\) is replaced with their sum \(\sum_{i=1}^C x_i\).
 								Through this they arrive at their final loss function which can be used with gradient descent:
-								$$L_{unsup}^{ME} = -\sum_{x_i}\left [\sum_{j=1}^K f_j(x_i)\prod_{k=1, k\neq j}^K (1-f_k(x_i))\right ],$$
-								where \(ME\) stands for mutual exclusivity, since this loss trains the model to predict only one class for a given input.
+								$$L_{unsup} = -\sum_{x_i}\left [\sum_{j=1}^C f_j(x_i)\prod_{c=1, c\neq j}^C (1-f_c(x_i))\right ].$$
+								This loss trains the model to predict only one class for a given input thereby minimizing its entropy.
+								Using this approach they achieve an accuracy of 85.18% on the MNIST data set (80 labels), 84.7% on the SVHN data set (732 labels), and 72.29% on the CIFAR-10 data set (6000 labels).
 								</p>
+								
+								<p>
+								Overall, we can see that entropy minimization methods on their own are not particularly successful when compared to e.g. graph based methods.
+								While the approach is easy to implement the performance is much worse than other current approaches.
+								This could be due to the fact that that some confirmation bias is introduced and that current high capacity models might just overfit to the data.
+								As we will see in the next blog posts, however, entropy based approaches are often combined with other SSL approaches, leading to overall state-of-the-art performance on multiple data sets in combination with other approaches.
+								</p>
+					</div>
+				</section>
+				
+				<!-- Conclusion -->
+				<section id="conclusion" class="wrapper style1">
+
+					<div class="container 75%" align="justify">
+						<h3>Conclusion</h3>
+							<p>In this blog post we introduced the concept of discriminative semi-supervised learning for image classification.
+							We have looked at some current approaches based on graphs and entropy minimization and, more specifically, how these approaches can be combined with current deep learning approaches to increase their performance even more.
+							In the next blog posts we will look more closely at other, highly successful, approaches of SSL in combination with deep learning, such as consistency regularization and co-training.
+							If you have any questions or feedback don't hesitate to contact me.
+							Otherwise stay tuned for the next blog post.
+							</p>
 					</div>
 				</section>
 
