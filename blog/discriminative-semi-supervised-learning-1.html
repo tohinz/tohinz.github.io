@@ -101,7 +101,7 @@
 						<p>Let's assume we have a data set \(X_L=\{x_i\}_{i=1}^{l}\) consisting of \(l\) images and \(Y=\{y_i\}_{i=1}^{l}\) being the set of accompanying labels assigning each data point to one of \(C\) classes.
 						Additionally, we have a number of images \(X_U=\{x_i\}_{i=l+1}^{n}\) for which we do not have accompanying labels. 
 						In SSL for image classification the full set of samples \(X\) consists of a set of labelled images \(X_L\) and unlabelled images \(X_U\): 
-						$$X = X_L &#8899; X_U\tag{1}\label{a},$$
+						$$X = X_L &#8899; X_U,$$
 						where our set of labels \(Y\) only contains labels for the labelled subset \(X_L\).
 						Our labels are usually encoded as one-hot vectors, meaning the label \(y_i \in \{0,1\}^C\) for the <i>i</i>-th data point in \(X_L\) belonging to class \(c\) is a vector of length \(C\) which is zero everywhere except at the class index:
 						$$(y_i)_k = \begin{cases}
@@ -149,12 +149,19 @@
 							
 							<p>Another way to describe SSL techniques is in the setting of <strong>generative and discriminative models</strong>.
 							<strong>Discriminative models</strong> try to predict the label \(y\) for a given input \(x\), i.e. they try to model \(P(y\vert x)\), which is usually done by some form of maximum likelihood estimation.
-							<strong>Generative models</strong>, on the other hand, try to learn something about the data distribution \(P(x)\) itself, or, in the case of available labels, try to model the joint distribution \(P(x,y)\).
+							<strong>Generative models</strong>, on the other hand, try to learn something about the data distribution \(P(x)\) itself, or, in the case of available labels, try to model the class-conditional density \(P(x\vert y)\) from which (for a known distribution of class labels) we can derive the joint distribution \(P(x,y) = P(x\vert y)\ P(y)\).
 							As a consequence, <em>generative models can be said to be more powerful than discriminative models</em>.
 							They also have no strict need for any labels, so can naturally be trained completely unsupervised and still learn useful characteristics about the data distribution.
+							Generative models can be used for classification through the application of Bayes' rule: \(P(y\vert x) = \frac{P(x\vert y)\ P(y)}{P(x)}\), or through the definition of conditional probability: \(P(y\vert x) = \frac{P(x,y)}{P(x)}\).
 							<em>Nonetheless, discriminative models are (so far) much more popular for classification (i.e. discriminative) tasks, since they usually perform better on those tasks than generative models.</em>
-							A reason for this can be that the fitness measure for generative models is not discriminative, so that better generative models are not necessarily better predictors of class labels.
-							Additionally, estimation is much more demanding than discrimination, since the model of \(P(x,y)\) is exhaustive, hence necessarily more complex than the model of \(P(y\vert x)\).
+							A reason for this may be that the fitness measure for generative models is not discriminative, so that better generative models are not necessarily better predictors of class labels.
+							Additionally, density estimation generally is much more demanding than classification and Vapnik's principle for high-dimensional estimation states: <em>When trying to solve some problem, one should not solve a more difficult problem as an intermediate step</em>.
+							Generative models try to estimate a density \(P(x)\) as an intermediate step, which is not strictly necessary for the final classification task.
+							Discriminative models, on the other hand, directly estimate the labels \(P(y\vert x)\).
+							This might be another reason for the current success and popularity for discriminative models for classification tasks.
+							Nevertheless, generative models are widely used in the deep learning community and have lead to remarkable success in the area of SSL.
+							See for example <a href="http://papers.nips.cc/paper/5352-semi-supervised-learning-with-deep-generative-models" target="_blank">Kingma et al.</a> (2014) for one of the first approaches of combining generative models and deep neural networks for semi-supervised image classification.
+							In spite of this, we will concentrate on discriminative approaches for semi-supervised image classification (which have also lead to state-of-the-art results) in the rest of this blog post.
 							</p>
 							
 							<p>For more details on these kinds of models and a more thorough background check out the overviews by <a href="https://www.molgen.mpg.de/3659531/MITPress--SemiSupervised-Learning.pdf" target="_blank">Olivier Chapelle et al.</a> and <a href="http://legacydirs.umiacs.umd.edu/~hal/courses/2011F_ML/out/ssl_survey.pdf" target="_blank">Xiaojin Zhu</a>.
@@ -412,6 +419,16 @@
 							In the next blog posts we will look more closely at other, highly successful, approaches of SSL in combination with deep learning, such as consistency regularization and co-training.
 							If you have any questions or feedback don't hesitate to contact me.
 							Otherwise stay tuned for the next blog post.
+							</p>
+					</div>
+				</section>
+				
+				<!-- Acknowledgement -->
+				<section id="conclusion" class="wrapper style1">
+
+					<div class="container 75%" align="justify">
+						<h4>Acknowledgements</h4>
+							<p>We thank <a href="http://www.manfred.eppe.eu/" target="_blank">Manfred Eppe</a> for his thoughtful feedback.
 							</p>
 					</div>
 				</section>
