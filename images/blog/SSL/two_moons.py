@@ -9,7 +9,7 @@ import math
 plt.figure(figsize=(4, 4))
 
 # sample points
-X1, Y1 = make_moons(n_samples=100, shuffle=True, noise=0.01, random_state=None)
+X1, Y1 = make_moons(n_samples=400, shuffle=True, noise=0.05, random_state=None)
 
 # exit()
 
@@ -18,15 +18,17 @@ X1, Y1 = make_moons(n_samples=100, shuffle=True, noise=0.01, random_state=None)
 # Y1 = [0, 0, 0, 1, 1, 1]
 
 # normalize points
-X1[:, 0] = (X1[:, 0]-min(X1[:, 0])) / (max(X1[:, 0])-min(X1[:, 0]))
-X1[:, 1] = (X1[:, 1]-min(X1[:, 1])) / (max(X1[:, 1])-min(X1[:, 1]))
+# X1[:, 0] = (X1[:, 0]-min(X1[:, 0])) / (max(X1[:, 0])-min(X1[:, 0]))
+# X1[:, 1] = (X1[:, 1]-min(X1[:, 1])) / (max(X1[:, 1])-min(X1[:, 1]))
 # print(Y1)
 # print(X1[0])
 # print(X1[1])
 
 # generate basic plot with the samples
 
+################################################################
 # color dots
+################################################################
 col = []
 for _label in Y1:
     if _label == 0:
@@ -34,6 +36,7 @@ for _label in Y1:
     else:
         col.append(("r"))
 tm = plt.scatter(X1[:, 0], X1[:, 1], marker='o', facecolors=col, s=15, edgecolor='k', linewidths=0.5)
+################################################################
 
 
 ################################################################
@@ -87,8 +90,8 @@ tm = plt.scatter(X1[:, 0], X1[:, 1], marker='o', facecolors=col, s=15, edgecolor
 ################################################################
 # calculate label propagation
 ################################################################
-# num_samples = 20
-# num_labels = 6
+# num_samples = 200
+# num_labels = 150
 #
 # # sort X1 by label and increasing x coordinate
 # x_0 = np.asarray(X1[Y1 == 0])
