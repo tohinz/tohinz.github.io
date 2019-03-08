@@ -5,8 +5,10 @@
 	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 -->
 <html>
-	{% include head.html %}
 	<head>
+		{% if site.google_analytics and jekyll.environment == 'production' %}
+		    {% include analytics.html %}
+		{% endif %}
 		<title>Tobias Hinz</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
