@@ -1,6 +1,9 @@
 name: Tobias Hinz
 markdown: kramdown
 
+title: Tobias Hinz
+url: https://tohinz.github.io/
+
 # Jekyll Plugins
 plugins:
   - jekyll-seo-tag
