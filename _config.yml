@@ -3,6 +3,7 @@ markdown: kramdown
 
 title: Tobias Hinz
 url: https://tohinz.github.io/
+description: personal website of Tobias Hinz
 
 # Jekyll Plugins
 plugins:
