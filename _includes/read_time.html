@@ -1,4 +1,5 @@
-{% assign num_words = page.content | strip_html | number_of_words %}
+<--!{% assign num_words = page.content | strip_html | number_of_words %}-->
+{% assign num_words = 450 %}
 {% assign minutes = num_words | divided_by: 200 %}
 {% assign minutes = num_words | divided_by: 200.0 %}
 {% assign diff = minutes_f | minus: minutes_i %}
