@@ -1,7 +1,17 @@
 ---
 layout: default
 ---
-{% include read_time.html %}
+<section id="one" class="wrapper style1">
+
+	<div class="container 75%">
+		<header>
+			<h2 style="text-align: center">{{ page.blog_title }}</h2>
+			<p style="text-align: center">{{ page.author} }, {{ page.date | date_to_string }}</p>
+      <p>{% include read_time.html %}</p>
+		</header>
+	</div>
+</section>
+
 <div class="post">
   {{ content }}
 </div>
