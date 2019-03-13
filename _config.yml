@@ -1,9 +1,11 @@
-name: Tobias Hinz
+author:
+  name: Tobias Hinz
 markdown: kramdown
 
 title: Tobias Hinz
-url: https://tohinz.github.io/
 description: personal website of Tobias Hinz
+url: "https://tohinz.github.io/"
+baseurl: ""
 
 # Jekyll Plugins
 plugins:
