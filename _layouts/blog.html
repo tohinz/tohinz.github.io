@@ -8,6 +8,7 @@ layout: default
 			<h2 style="text-align: center">{{ page.blog_title }}</h2>
 			<p style="text-align: center">{{ page.author }}</p>
 			<p style="text-align: center">{{ page.date | date_to_long_string }}</p>
+			<p style="text-align: center">Reading time: {% include read_time.html %}</p>
 		</header>
 	</div>
 </section>
