@@ -1,5 +1,9 @@
 name: Tobias Hinz
 markdown: kramdown
 
+# Jekyll Plugins
+plugins:
+  - jekyll-seo-tag
+
 # Google Analytics
 google_analytics: UA-135888913-1
