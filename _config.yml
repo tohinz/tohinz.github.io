@@ -10,6 +10,7 @@ baseurl: ""
 # Jekyll Plugins
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
 
 # Google Analytics
 google_analytics: UA-135888913-1
