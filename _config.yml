@@ -4,7 +4,7 @@ markdown: kramdown
 
 title: Tobias Hinz
 description: personal website of Tobias Hinz
-url: "https://tohinz.github.io/"
+url: "https://tohinz.github.io"
 baseurl: ""
 
 # Jekyll Plugins
