@@ -16,4 +16,4 @@ plugins:
 google_analytics: UA-135888913-1
 
 disqus:
-  shortname: https://https-tohinz-github-io
+  shortname: "https://https-tohinz-github-io"
