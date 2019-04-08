@@ -22,3 +22,13 @@ google_analytics: UA-135888913-1
 
 disqus:
   shortname: https-tohinz-github-io
+
+compress_html:
+  clippings: all
+  comments: ["<!-- ", " -->"]
+  endings: all
+  ignore:
+    envs: []
+  blanklines: false
+  profile: false
+  startings: [html, head, body]
