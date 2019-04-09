@@ -16,6 +16,7 @@ social:
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-include-cache
 
 # Google Analytics
 google_analytics: UA-135888913-1

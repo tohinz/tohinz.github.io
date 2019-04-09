@@ -6,77 +6,22 @@ layout: compress
 <html>
 	<head>
 		<title>{{ page.title }}</title>
-		<!-- link to bootstrap stylesheet -->
-		<link rel="stylesheet" href="/css/bootstrap.min.css">
-		<!-- link to main stylesheet -->
-		<link rel="stylesheet" type="text/css" href="/css/main.css">
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="/css/main.css" />
-		<link rel="icon" href="/images/favicon.ico">
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-135888913-1"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-			gtag('config', 'UA-135888913-1');
-		</script>
-		{% include mathjax.html %}
+		{% include_cached head.html %}
+		{% include_cached mathjax.html %}
 		{% seo %}
 	</head>
 	<body>
 		<!-- Header -->
-		<header id="header">
-		<div class="container 95%">
-			<ul class="icons">
-				<li><a href="https://www.linkedin.com/in/tobias-hinz-397881123" class="icon fa-linkedin" target="_blank"></a></li>
-				<li><a href="https://github.com/tohinz" class="icon fa-github" target="_blank"></a></li>
-				<li><a href="https://www.inf.uni-hamburg.de/en/inst/ab/wtm/people/hinz.html" class="icon fa-university" target="_blank"></a></li>
-			</ul>
-
-			<nav id="nav">
-				<ul>
-					<li><a href="/index.html" class="active">HOME</a></li>
-					<li><a href="/index.html#publications">PUBLICATIONS</a></li>
-					<li><a href="/index.html#blog">BLOG</a></li>
-					<li><a href="/index.html#cv">CV</a></li>
-				</ul>
-			</nav>
-		</div>
-		</header>
-		<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+		{% include_cached header.html %}
 
 		<div class="container">
 		{{ content }}
-		</div><!-- /.container -->
+		</div>
 		
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<hr>
-				<p><span style="font-weight: bold">TOB [DOT] HINZ [AT] GMAIL [DOT] COM</span><hr</p>
-				<p>Knowledge Technology, Universität Hamburg, Vogt-Koelln-Str. 30, 22527 Hamburg, Germany</p>
-
-				<ul class="icons">
-					<li><a href="https://www.linkedin.com/in/tobias-hinz-397881123" class="icon fa-linkedin" target="_blank"></a></li>
-					<li><a href="https://github.com/tohinz" class="icon fa-github" target="_blank"></a></li>
-					<li><a href="https://www.inf.uni-hamburg.de/en/inst/ab/wtm/people/hinz.html" class="icon fa-university" target="_blank"></a></li>
-				</ul>
-
-				<ul class="copyright">
-					<li>&copy; 2019 Tobias Hinz</li>
-					<li>Design: <a href="https://templated.co">TEMPLATED</a></li>
-				</ul>
-			</div>
-		</footer>
+		{% include_cached footer.html %}
 
 		<!-- Scripts -->
-		<script src="/js/jquery.min.js"></script>
-		<script src="/js/skel.min.js"></script>
-		<script src="/js/util.js"></script>
-		<script src="/js/main.js"></script>
-		<script src="/js/popper.min.js"></script>
-		<script src="/js/bootstrap.min.js"></script>
+		{% include_cached scripts.html %}
 	</body>
 </html>
