@@ -5,7 +5,7 @@ author: Tobias Hinz
 blog_title: How to Serve Multiple Django Websites with Multiple Virtualenvs on Apache and mod_wsgi
 date: 2019-04-10
 description: how to set up your Ubuntu with Apache to serve multiple websites in parallel with the help of virtualenv and mod_wsgi
-mathjax: true
+mathjax: false
 comments: true
 ---
 In this short guide we will describe how to set up an Apache server on Ubuntu 18.04 in order to serve multiple Django websites which use (potentially) different virtualenv environments[^1]. Specifically, this tutorial shows you how to:
