@@ -14,11 +14,11 @@ comments: true
 
 Last week I attended the Eastern European Machine Learning Summer School ([EEML](https://www.eeml.eu/home){:target="_blank"}) 2019 in Bucharest (Romania). This is the second edition of the summer school after the [TMLSS](https://tmlss.ro/){:target="_blank"} in Cluj-Napoca (also Romania) last year.
 
-<center><img src="/images/blog/EEML2019/eeml-welcome.jpg" alt="EEML Welcome Sign" width="50%"/></center>
+<center><a href="/images/blog/EEML2019/eeml-welcome.jpg"><img src="/images/blog/EEML2019/eeml-welcome.jpg" alt="EEML Welcome Sign" width="50%"/></a></center>
 
 The summer school is mainly organized by members of [DeepMind](https://deepmind.com/){:target="_blank"}, local researchers of the Politehnica University of Bucharest, and A LOT of volunteers. As implied by the name EEML, focuses on topics around Machine Learning and Artificial Intelligence, mostly on the subfield of "Deep Learning" and Reinforcement Learning.
 
-<center><img src="/images/blog/EEML2019/eeml-organizers.jpg" alt="EEML Organizers" width="50%"/></center>
+<center><a href="/images/blog/EEML2019/eeml-organizers.jpg"><img src="/images/blog/EEML2019/eeml-organizers.jpg" alt="EEML Organizers" width="50%"/></a></center>
 
 The [idea behind EEML](https://www.eeml.eu/blog){:target="_blank"} is to shine a spotlight on Eastern Europe to emphasize its potential,  to provide learning and networking opportunities for participants from all over the world, and to highlight imbalances (e.g. gender and nationality) in the current "average" group of researchers and conferences. As such, the organizers really try to focus and attract talent from both Eastern Europe and under-privileged groups in general.
 
@@ -52,11 +52,11 @@ On Thursday morning we only had one lecture and one industry keynote before head
 
 Finally, on Friday night we had a Gala dinner at the [Restaurant Pescăruș](http://www.restaurantpescarus.ro/en/){:target="_blank"} in the beautiful Herăstrău Park which is where we took our group photo.
 
-<center><img src="/images/blog/EEML2019/eeml-group.jpg" alt="EEML Group Photo" width="50%"/></center>
+<center><a href="/images/blog/EEML2019/eeml-group.jpg"><img src="/images/blog/EEML2019/eeml-group.jpg" alt="EEML Group Photo" width="75%"/></a></center>
 
 Throughout the days we were always provided with breakfast, lunch, and dinner at the [PRECIS Center](http://precis.acs.pub.ro/centrul-de-cercetare/){:target="_blank"}, which is also where the EEML lectures and practical sessions took place.
 
-<center><img src="/images/blog/EEML2019/eeml-buffet.jpg" alt="EEML Buffet" width="50%"/></center>
+<center><a href="/images/blog/EEML2019/eeml-buffet.jpg"><img src="/images/blog/EEML2019/eeml-buffet.jpg" alt="EEML Buffet" width="75%"/></a></center>
 
 Another nice effect of having all lectures, practical sessions, and breaks in the same location was that this made it easy to "catch" some of the lecturers to talk to during the breaks. Most of the lecturers stayed for one-two days and mingled with the participants. As such, it was straight forward to approach them and talk with them about their research. Besides being able to talk with the organizers who were always around and happy to answer questions or talk about the latest trends in research I was able to have nice discussions with other well-known researchers such as, e.g., [Nal Kalchbrenner](https://www.nal.ai/){:target="_blank"}, [Andrew Zisserman](https://www.robots.ox.ac.uk/~az/){:target="_blank"}, and [Zeynep Akata](https://ivi.fnwi.uva.nl/uvaboschdeltalab/people/zeynep-akata/){:target="_blank"}.
 
