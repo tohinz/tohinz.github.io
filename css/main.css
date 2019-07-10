@@ -2722,7 +2722,7 @@
 	}
 
 	.wrapper {
-		padding: 6em 0 4em 0;
+		padding: 3em 0 4em 0;
 	}
 
 		.wrapper > .inner {
@@ -2730,8 +2730,16 @@
 			width: 60em;
 		}
 
+		.wrapper.style1 {
+			background-color: #ffffff;
+			margin-top: 0em;
+			margin-bottom: 0em;
+		}
+
 		.wrapper.style2 {
-			background-color: #f6f6f6;
+			background-color: #fafafa;
+			margin-top: 0em;
+			margin-bottom: 0em;
 		}
 
 		.wrapper.style3 {
