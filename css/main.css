@@ -1684,6 +1684,11 @@
 			text-decoration: none;
 		}
 
+	h1 {
+		font-size: 2em;
+		line-height: 1.5em;
+	}
+	
 	h2 {
 		font-size: 1.75em;
 		line-height: 1.5em;
