@@ -1,10 +1,10 @@
 ---
 layout: blog
-title: Deploy Multiple Django Websites with Apache and Virtualenv
+title: How to Serve Multiple Django Websites with Multiple Virtualenvs on Apache and mod_wsgi
 author: Tobias Hinz
-blog_title: How to Serve Multiple Django Websites with Multiple Virtualenvs on Apache and mod_wsgi
 date: 2019-04-10
-description: how to set up your Ubuntu with Apache to serve multiple websites in parallel with the help of virtualenv and mod_wsgi
+description: How to set up your Ubuntu with Apache to serve multiple websites in parallel with the help of virtualenv and mod_wsgi.
+thumbnail: /images/blog/Apache-Django/django-logo-positive.jpg
 mathjax: false
 comments: true
 ---
@@ -161,7 +161,7 @@ The final `wsgi.py` file should look something like this:
     
     #to set enviroment settings for Django apps
     os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'
-
+    
     # Activate your virtual env
     activate_env=os.path.expanduser('/home/django_websites/django-virtualenv/bin/activate_this.py')
     exec(open(activate_env).read(), {'__file__': activate_env})

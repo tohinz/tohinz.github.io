@@ -2,9 +2,9 @@
 layout: blog
 title: Generating Multiple Objects at Spatially Distinct Locations
 author: Tobias Hinz
-blog_title: Generating Multiple Objects at Spatially Distinct Locations
 date: 2019-01-09
-description: summary of our paper published at the International Conference on Learning Representations (ICLR) 2019 about generative adversarial networks (GAN) and their use in text to image synthesis and controlled image generation
+description: A summary of our paper published at the International Conference on Learning Representations (ICLR) 2019 about generative adversarial networks (GAN) and their use in text to image synthesis and controlled image generation.
+thumbnail: /images/publication/thumbnails/mogan.jpg
 mathjax: true
 comments: true
 ---
@@ -22,7 +22,7 @@ Currently, [Generative Adversarial Nets](http://papers.nips.cc/paper/5423-genera
 The discriminator's goal is to distinguish between real and generated images, while the generator's goal is to "fool" the discriminator, i.e. to generate images that are indistinguishable from real ones. This results in a competition between the two networks and both networks are typically trained in an alternating manner to get better at their respective goals. The end result (ideally) is a generator that can generate images that are indistinguishable from real images.
 
 <figure>
-    <img src="../images/blog/ICLR2019/gan_graphic.png" alt="Image of a GAN" width="75%"/>
+    <img src="/images/blog/ICLR2019/gan_graphic.png" alt="Image of a GAN" width="75%"/>
     <figcaption><i>Figure 1: Image of a GAN, depicting the generator and discriminator networks and the various inputs each network gets.</i></figcaption>
 </figure>
 <p></p>
@@ -30,7 +30,7 @@ The discriminator's goal is to distinguish between real and generated images, wh
 However, most current GAN models focus on modeling images that either contain only one centralized object (e.g. faces ([CelebA](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)), objects ([ImageNet](http://www.image-net.org/){:target="_blank"}), birds ([CUB-200](http://www.vision.caltech.edu/visipedia/CUB-200-2011.html){:target="_blank"}), flowers ([Oxford-102](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/){:target="_blank"})) or on images from one specific domain (e.g. [LSUN](http://lsun.cs.princeton.edu/2017/){:target="_blank"} bedrooms or churches). This means that, overall, the variance between images used for training GANs tends to be low, while many real-life images tend to depict complex scenes with different objects at different locations.
 
 <figure>
-    <img src="../images/blog/ICLR2019/datasets_examples.png" alt="Example Images from CelebA, ImageNet, ..." width="75%"/>
+    <img src="/images/blog/ICLR2019/datasets_examples.png" alt="Example Images from CelebA, ImageNet, ..." width="75%"/>
     <figcaption><i>Figure 2: Example Images from CelebA, ImageNet, CUB-200, and Oxford-102 data sets (left to right)</i></figcaption>
 </figure>
 <p></p>
@@ -38,7 +38,7 @@ However, most current GAN models focus on modeling images that either contain on
 The [MS-COCO](http://cocodataset.org/#home){:target="_blank"} data set (see Figure 3 for example images) consists of more than 100,000 images of "**C**ommon **O**bjects in **CO**ntext" and has a high variability in its image contents. Each image is associated with five captions that describe the image. In order to model images with complex scenes like in the MS-COCO data set, we need models that can model images containing multiple objects at distinct locations. To achieve this, we need control over what kind of objects are generated (e.g. persons, animals, objects), the location, and the size of these objects.
 
 <figure>
-    <img src="../images/blog/ICLR2019/coco_examples.png" alt="Example Images COCO with captions" width="70%"/>
+    <img src="/images/blog/ICLR2019/coco_examples.png" alt="Example Images COCO with captions" width="70%"/>
     <figcaption><i>Figure 3: Example Images from the MS-COCO data set.</i></figcaption>
 </figure>
 <p></p>
@@ -46,7 +46,7 @@ The [MS-COCO](http://cocodataset.org/#home){:target="_blank"} data set (see Figu
 [Current](https://arxiv.org/abs/1804.01622){:target="_blank"} [work](https://arxiv.org/abs/1711.11585){:target="_blank"} [often](https://arxiv.org/abs/1612.00215){:target="_blank"} approaches this challenge by using a scene layout as additional conditional input to the model. A scene layout basically defines the structure of a given scene on a high-level, abstract basis and describes where in the image certain objects should be located. GANs that make use of these layouts therefore have more information about the image they should generate and we can control the image generation process by adapting the individual scene layouts. However, in order to train these models we need images with a known scene layout, which is usually obtained by having humans annotate images. As a result, many of the recent models are trained on the [COCO-Stuff](https://github.com/nightrome/cocostuff) data set (see Figure 4), which augments the MS-COCO data set with pixel-level annotations.
 
 <figure>
-    <img src="../images/blog/ICLR2019/coco_stuff_example.png" alt="Example of semantic layout image and COCO-Stuff" width="75%"/>
+    <img src="/images/blog/ICLR2019/coco_stuff_example.png" alt="Example of semantic layout image and COCO-Stuff" width="75%"/>
     <figcaption><i>Figure 4: Example images from the COCO-Stuff data set and their respective scene layout</i></figcaption>
 </figure>
 <p></p>
@@ -54,7 +54,7 @@ The [MS-COCO](http://cocodataset.org/#home){:target="_blank"} data set (see Figu
 Our work takes a similar approach, but instead of needing a complete scene layout for each image during training we only require the location of "salient" objects within the image (see Figure 5), while the rest of the scene (e.g. the background) is generated automatically. This reduces the amount of labels we need for our training images. Additionally, it also makes it easier to modify the layout of an image, since all we have to do is move around the location of the objects whose location we want to change, while the model will keep the background and the relationships between the objects coherent without further instructions.
 
 <figure>
-    <img src="../images/blog/ICLR2019/coco_bbox_example.png" alt="Examples of COCO imgs with bboxes" width="70%"/>
+    <img src="/images/blog/ICLR2019/coco_bbox_example.png" alt="Examples of COCO imgs with bboxes" width="70%"/>
     <figcaption><i>Figure 5: Examples of MS-COCO imgages with the respecitve bounding boxes</i></figcaption>
 </figure>
 <p></p>
@@ -68,7 +68,7 @@ Our model is a GAN as depicted in Figure 1 with some architectural adaptations (
 [^2]: [Reed et al.](https://arxiv.org/abs/1610.02454){:target="_blank"} propose a similar architecture, but focus only on one individual object within an image. For more details on the differences please see our [paper](https://arxiv.org/abs/1901.00686).
 
 <figure>
-    <img src="../images/blog/ICLR2019/model.png" alt="Our Model" width="100%"/>
+    <img src="/images/blog/ICLR2019/model.png" alt="Our Model" width="100%"/>
     <figcaption><i>Figure 6: Both the generator and the discriminator of our model consist of a global and an object pathway. The global pathway focuses on global image characteristics, such as the background, while the object pathway is responsible for modeling individual objects at their specified location.</i></figcaption>
 </figure>
 <p></p>
@@ -78,7 +78,7 @@ Our model is a GAN as depicted in Figure 1 with some architectural adaptations (
 We first create a label for each salient object within the image. For this we use the [caption embedding](https://github.com/reedscot/icml2016){:target="_blank"} for this image (i.e. the image caption is represented as a vector) and concatenate it with the label (encoded as a one-hot vector) for the given object (e.g. "person"). From this we obtain a label embedding for the given object by applying a matrix multiplication and a non-linearity (i.e. a fully connected layer). By combining the image caption and the object label to generate the final label the network can incorporate additional information (such as shape or color, which is not obtainable from the object label itself) into the final label.
 
 <figure>
-    <img src="../images/blog/ICLR2019/label_encoding.png" alt="Label encoding" width="100%"/>
+    <img src="/images/blog/ICLR2019/label_encoding.png" alt="Label encoding" width="100%"/>
     <figcaption><i>Figure 7: Obtain individual labels for each bounding box.</i></figcaption>
 </figure>
 <p></p>
@@ -86,7 +86,7 @@ We first create a label for each salient object within the image. For this we us
 Once we have a label for each of the objects we want to model we continue with the global and object pathway. The **global pathway** first creates a layout encoding (Figure 8) which encodes the general scene layout, i.e. the location and object category of the different objects we want to model. To obtain the layout encoding we spatially replicate the previously obtained labels for each of the objects at the locations of their bounding box within an empty image. The resulting layout is then encoded with a convolutional neural network (CNN).
 
 <figure>
-    <img src="../images/blog/ICLR2019/layout_encoding.png" alt="Layout encoding" width="75%"/>
+    <img src="/images/blog/ICLR2019/layout_encoding.png" alt="Layout encoding" width="75%"/>
     <figcaption><i>Figure 8: Obtain a layout encoding for the generator's global pathway.</i></figcaption>
 </figure>
 <p></p>
@@ -94,7 +94,7 @@ Once we have a label for each of the objects we want to model we continue with t
 This layout encoding is then concatenated with the image caption embedding and the randomly sampled noise vector and we then apply multiple convolutional layers with intermediate nearest neighbor upsampling to obtain a representation of the global image background.
 
 <figure>
-    <img src="../images/blog/ICLR2019/g_global_pathway.png" alt="Generator global pathway" width="75%"/>
+    <img src="/images/blog/ICLR2019/g_global_pathway.png" alt="Generator global pathway" width="75%"/>
     <figcaption><i>Figure 9: Global pathway of the generator.</i></figcaption>
 </figure>
 <p></p>
@@ -102,7 +102,7 @@ This layout encoding is then concatenated with the image caption embedding and t
 In parallel, the **object pathway** gets as input the first of the previously generated object label and uses it to generate a representation of this object. This object representation is then added to an empty image at the location of the object's bounding box (Figure 10). We repeat this for each of the object labels until we have an image that contains the object representations at the given bounding box locations.
 
 <figure>
-    <img src="../images/blog/ICLR2019/g_object_pathway.png" alt="Generator object pathway" width="75%"/>
+    <img src="/images/blog/ICLR2019/g_object_pathway.png" alt="Generator object pathway" width="75%"/>
     <figcaption><i>Figure 10: Oject pathway of the generator.</i></figcaption>
 </figure>
 <p></p>
@@ -110,7 +110,7 @@ In parallel, the **object pathway** gets as input the first of the previously ge
 As a final step, we concatenate the output of the global and object pathways and apply more convolutional layers with intermediate nearest neighbor upsampling to obtain a the final image for the given image caption and bounding box locations.
 
 <figure>
-    <img src="../images/blog/ICLR2019/g_final_pathway.png" alt="Generator final pathway" width="75%"/>
+    <img src="/images/blog/ICLR2019/g_final_pathway.png" alt="Generator final pathway" width="75%"/>
     <figcaption><i>Figure 11: Final output of the generator.</i></figcaption>
 </figure>
 <p></p>
@@ -122,7 +122,7 @@ The discriminator also consists of a **global** and an **object pathway**.
 The **global pathway** uses a CNN to obtain a global feature representation of the whole image. 
 
 <figure>
-    <img src="../images/blog/ICLR2019/d_global_pathway.png" alt="Discriminator global pathway" width="75%"/>
+    <img src="/images/blog/ICLR2019/d_global_pathway.png" alt="Discriminator global pathway" width="75%"/>
     <figcaption><i>Figure 12: Global pathway of the discriminator.</i></figcaption>
 </figure>
 <p></p>
@@ -130,7 +130,7 @@ The **global pathway** uses a CNN to obtain a global feature representation of t
 The **object pathway** is again applied to each of the objects individually. We extract the first object from the image and concatenate it with the object category for this object (e.g. "person"). We then apply a CNN to obtain a feature representation of the given object, which is placed at the location of the bounding box on an empty image. This is done for each of the objects within the image and results in an image that contains the object features of the given objects at their given location.
 
 <figure>
-    <img src="../images/blog/ICLR2019/d_object_pathway.png" alt="Discriminator object pathway" width="75%"/>
+    <img src="/images/blog/ICLR2019/d_object_pathway.png" alt="Discriminator object pathway" width="75%"/>
     <figcaption><i>Figure 13: Object pathway of the discriminator.</i></figcaption>
 </figure>
 <p></p>
@@ -138,7 +138,7 @@ The **object pathway** is again applied to each of the objects individually. We 
 Finally, the outputs of the object and global pathways are again concatenated and processed by a CNN. At the end, the features from the CNN are concatenated with the given image caption embedding and the resulting tensor is classified as either generated or real.
 
 <figure>
-    <img src="../images/blog/ICLR2019/d_final_pathway.png" alt="Discriminator final pathway" width="75%"/>
+    <img src="/images/blog/ICLR2019/d_final_pathway.png" alt="Discriminator final pathway" width="75%"/>
     <figcaption><i>Figure 14: Final output of the discriminator.</i></figcaption>
 </figure>
 <p></p>
@@ -159,7 +159,7 @@ Evaluating generative models is a notoriously hard task for which it is difficul
 On the Multi-MNIST data set we use training images that contain three digits at non-overlapping positions.
 
 <figure>
-    <img src="../images/blog/ICLR2019/multi_mnist_real.png" alt="Multi-MNIST real examples" width="100%"/>
+    <img src="/images/blog/ICLR2019/multi_mnist_real.png" alt="Multi-MNIST real examples" width="100%"/>
     <figcaption><i>Figure 15: Real samples from the our Multi-MNIST data set.</i></figcaption>
 </figure>
 <p></p>
@@ -167,7 +167,7 @@ On the Multi-MNIST data set we use training images that contain three digits at 
 After the training was finished we can use our model to generate new images in which we can specify where a digit should occur and what kind of digits should be generated. Even though our training images only consisted of images that contained exactly three digits our model is able to generate images with various amounts of digits:
 
 <figure>
-    <img src="../images/blog/ICLR2019/multi_mnist_digit_example.png" alt="Multi-MNIST generated examples" width="100%"/>
+    <img src="/images/blog/ICLR2019/multi_mnist_digit_example.png" alt="Multi-MNIST generated examples" width="100%"/>
     <figcaption><i>Figure 16: Generated Multi-MNIST images with different numbers of digits per image (yellow digits are the ground truth labels given to the generator, bounding boxes highlighted for visualization).</i></figcaption>
 </figure>
 <p></p>
@@ -175,7 +175,7 @@ After the training was finished we can use our model to generate new images in w
 Furthermore, we can also change the size of the digits within the images:
 
 <figure>
-    <img src="../images/blog/ICLR2019/multi_mnist_size_example.png" alt="Multi-MNIST generated examples; different size" width="100%"/>
+    <img src="/images/blog/ICLR2019/multi_mnist_size_example.png" alt="Multi-MNIST generated examples; different size" width="100%"/>
     <figcaption><i>Figure 17: Generated Multi-MNIST images where digits are different sizes.</i></figcaption>
 </figure>
 <p></p>
@@ -187,7 +187,7 @@ We also performed ablation studies in which we trained the model without some of
 The CLEVR data set consists of images which contain different objects (cylinders, cubes, and spheres) of different sizes, colors, and materials at different locations.
 
 <figure>
-    <img src="../images/blog/ICLR2019/clevr_real_examples.png" alt="CLEVR real examples" width="100%"/>
+    <img src="/images/blog/ICLR2019/clevr_real_examples.png" alt="CLEVR real examples" width="100%"/>
     <figcaption><i>Figure 18: Real samples from our CLEVR data set.</i></figcaption>
 </figure>
 <p></p>
@@ -195,19 +195,19 @@ The CLEVR data set consists of images which contain different objects (cylinders
 We rendered images that contain 2-4 objects at various locations and again trained our model. After the training was finished we can generate images in which we can control different aspects (object category, color, location, and size) of the objects. As before, we can also generate images that contain more objects in an image than were observed during training.
 
 <figure>
-    <img src="../images/blog/ICLR2019/clevr_generated.png" alt="CLEVR generated examples" width="100%"/>
+    <img src="/images/blog/ICLR2019/clevr_generated.png" alt="CLEVR generated examples" width="100%"/>
     <figcaption><i>Figure 19: Generated CLEVR images. The left image of each pair is rendered by the rendering software, the right image of each pair is the image generated by our model (bounding boxes highlighted for visualization).</i></figcaption>
 </figure>
 <p></p>
 
-
 To test the generalization capabilities of our model we also used an adapted version of the CLEVR data set (CLEVR CoGenT) in which some color-object combinations only occur in either the training or the test set. Specifically, in the training set cubes are either gray, blue, brown, or yellow, while cylinders are either red, green, purple, or cyan. In the test set these combinations are inverted. Spheres can have either color in both the training and the test set. We can see that our model is able to generalize to novel object-color combinations, even though we can observe some minor artifacts.
 
 <figure>
-    <img src="../images/blog/ICLR2019/clevr_cogent.png" alt="CLEVR generated examples, CoGenT" width="100%"/>
+    <img src="/images/blog/ICLR2019/clevr_cogent.png" alt="CLEVR generated examples, CoGenT" width="100%"/>
     <figcaption><i>Figure 20: Generated images from the CLEVR-CoGenT data set.</i></figcaption>
 </figure>
 <p></p>
+
 Overall, the experiments on the synthetic data sets indicate that our model is able to control the location and various other characteristics of individual objects. It can also generalize to previously unseen object characteristics, unseen locations (if the location has been observed for another object during training) and to unseen numbers of objects. To further test the model's capabilities we now proceed with a more complex data set.
 
 #### MS-COCO
@@ -217,16 +217,15 @@ To evaluate our model on real world images we trained it on the MS-COCO data set
 After the training was finished we evaluated the generated images qualitatively to check if objects are placed at the requested locations. We can see that the images indeed contain objects at the given locations.
 
 <figure>
-    <img src="../images/blog/ICLR2019/coco_generated_examples.png" alt="COCO generated examples" width="100%"/>
+    <img src="/images/blog/ICLR2019/coco_generated_examples.png" alt="COCO generated examples" width="100%"/>
     <figcaption><i>Figure 21: Generated images from the MS-COCO data set. First and third rows show original images from the MS-COCO data set and their respective image captions. Rows two and four show the generated images. </i></figcaption>
 </figure>
 <p></p>
 
-
 To evaluate the impact of the global and the object pathway we can generate images while switching either the global or the object pathway off. We can see that the global pathway does indeed focus on the background of the image, but mostly ignores the high level objects at the given location. These are modeled by the object pathway, as can be seen in the last row.
 
 <figure>
-    <img src="../images/blog/ICLR2019/coco_pathway.png" alt="COCO generated examples; pathway evaluation" width="100%"/>
+    <img src="/images/blog/ICLR2019/coco_pathway.png" alt="COCO generated examples; pathway evaluation" width="100%"/>
     <figcaption><i>Figure 22: Visualization of the object and global pathway. Row one shows the original MS-COCO images and corresponding captions. Row two shows images that were generated with all pathways enabled. Row three shows generated images when the object pathway was deactivated, while row four shows images with the global pathway deactivated.</i></figcaption>
 </figure>
 <p></p>
@@ -247,7 +246,7 @@ While the overall results are promising, there are still some issues that need t
 Secondly, the dependence of our model on the object pathway can lead to sub-optimal results if there are no bounding box locations for objects within the image. Since the global pathway relies on the object pathway for the object features this can lead to images which only depict background but do not contain obvious objects from the image caption, if the object pathway is not used for these objects (e.g. because they are too small).
 
 <figure>
-    <img src="../images/blog/ICLR2019/coco_no_bbox.png" alt="COCO generated examples; no bounding box" width="100%"/>
+    <img src="/images/blog/ICLR2019/coco_no_bbox.png" alt="COCO generated examples; no bounding box" width="100%"/>
     <figcaption><i>Figure 23: Generated images from the MS-COCO data set when there is no output from the object pathway. While the background is realistic, important objects from the image captions are ignored, as their bounding box is too small and, therefore, the object pathway is not utilized.</i></figcaption>
 </figure>
 <p></p>
@@ -255,7 +254,7 @@ Secondly, the dependence of our model on the object pathway can lead to sub-opti
 Another issue is the generalization of objects to previously unseen locations. Experiments on the Multi-MNIST data set show that the model in its current form is unable to generalize objects to locations at which it has not seen **any** object during training. When we train the model with images that do not contain any digits in the lower half of the image, the model also fails to generate images that contain digits in the lower half of the image.
 
 <figure>
-    <img src="../images/blog/ICLR2019/multi_mnist_digit_bottom_half.png" alt="Mulit-MNIST generated examples; no digit in lower half" width="100%"/>
+    <img src="/images/blog/ICLR2019/multi_mnist_digit_bottom_half.png" alt="Mulit-MNIST generated examples; no digit in lower half" width="100%"/>
     <figcaption><i>Figure 24: Generated images from the Multi-MNIST data set when the model was trained with images that do not contain any digits in the lower half. Digits in the top half of the image are still recognizable, but digit quality degenerates in the lower half of the image.</i></figcaption>
 </figure>
 <p></p>
@@ -263,7 +262,7 @@ Another issue is the generalization of objects to previously unseen locations. E
 However, our model is able to generalize objects to locations at which it has not observed that specific object before, as long as other (similar) objects have been observed at that location. We trained our model with images that contain only the digits {0,1,2,3,4} in the top half of the image and only digits {5,6,7,8,9} in the bottom half of the image. After training, the model is capable of generating images that contain digits 0-4 also in the bottom half of the image and digits 5-9 in the top half.
 
 <figure>
-    <img src="../images/blog/ICLR2019/multi_mnist_digit_generalization.png" alt="Multi_MNIST generated examples; digit generalization" width="100%"/>
+    <img src="/images/blog/ICLR2019/multi_mnist_digit_generalization.png" alt="Multi_MNIST generated examples; digit generalization" width="100%"/>
     <figcaption><i>Figure 25: Generated images from the Multi-MNIST data set when the model was trained with images that only contain digits 0-4 in the top half of the image and digits 5-9 in the bottom half. We can see that the model is able to generalize digits to previously unseen locations, e.g. generating a "0" in the bottom half of an image.</i></figcaption>
 </figure>
 <p></p>

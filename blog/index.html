@@ -2,97 +2,38 @@
 layout: default
 title: Tobias Hinz - Blog
 ---
-<section id="blog" class="wrapper style1 special">
+<!-- This loops through the paginated posts -->
+<section id="blog" class="wrapper style2 special">
 	<div class="container 75%">
-		<h2 style="text-align: center">Blog</h2>
-		<p>Some blog posts highlighting (my) recent work and experiences.</p>
-		<hr />
-		
-		<ul class="row 150%">
+		{% for page in paginator.posts %}
+		  <ul class="row 150%">
 			<ul class="3u 4u(large) 12u$(medium)">
-				<div class="image rounded"><img src="/images/blog/EEML2019/eeml-logo.png" width="180" alt="" style="border:none;"/></div>
+				<div class="image rounded"><img src="{{ page.thumbnail }}" width="180" alt="" style="border:none;"/></div>
 			</ul>
 
 			<ul class="9u$ 8u$(large) 12u$(medium)">
 				<header>
-					<h4>Impressions from the Eastern European Machine Learning Summer School (EEML) 2019</h4>
-					<p>Posted on 08 July 2019</p>
+					<h4><a href="{{ page.url }}">{{ page.title }}</a></h4>
+					<p>Posted on {{ page.date | date: "%d %b %Y" }} | Reading time: {% include read_time.html %}</p>
 				</header>
-				<p>My impressions from this year's EEML in Bucharest, Romania.</p>
-				<p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="/blog/eastern-european-machine-learning-summer-school-2019">Continue reading</a></p>
+				<p>{{ page.description }}</p>
+				<p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="{{ page.url }}">Continue reading</a></p>
 			</ul>
 		</ul>
-
-		<hr />
-		
-		<ul class="row 150%">
-			<ul class="3u 4u(large) 12u$(medium)">
-				<div class="image rounded"><img src="/images/blog/ICLR2019-Impressions/iclr-logo.jpg" width="180" alt="" style="border:none;"/></div>
-			</ul>
-
-			<ul class="9u$ 8u$(large) 12u$(medium)">
-				<header>
-					<h4>Impressions from the International Conference on Learning Representations 2019</h4>
-					<p>Posted on 14 May 2019</p>
-				</header>
-				<p>My impressions from this year's ICLR in New Orleans, as well as an overview of papers I found particularly interesting.</p>
-				<p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="/blog/iclr-new-orleans-may-2019">Continue reading</a></p>
-			</ul>
-		</ul>
-		
-		<hr />
-		
-		<ul class="row 150%">
-			<ul class="3u 4u(large) 12u$(medium)">
-				<div class="image rounded"><img src="/images/blog/Apache-Django/django-logo-positive.jpg" width="180" alt="" style="border:none;"/></div>
-			</ul>
-
-			<ul class="9u$ 8u$(large) 12u$(medium)">
-				<header>
-					<h4>How to Serve Multiple Django Websites with Multiple Virtualenvs on Apache</h4>
-					<p>Posted on 10 April 2019</p>
-				</header>
-				<p>In this short guide we describe how to set up an Apache server on Ubuntu 18.04 in order to serve multiple Django websites which use (potentially) different Virtualenv environments.</p>
-				<p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="/blog/apache-django-virtualenv">Continue reading</a></p>
-			</ul>
-		</ul>
-
-		<hr />
-
-		<div class="row 150%">
-			<div class="3u 4u(large) 12u$(medium)">
-				<div class="image rounded"><img src="/images/blog/SSL/two_moons_example.png" width="180" alt="insert img here" style="border:none;"/></div>
-			</div>
-
-			<div class="9u$ 8u$(large) 12u$(medium)">
-				<header>
-					<h4>Semi-Supervised Learning with (Deep) Neural Networks (Part 1)</h4>
-					<p>Posted on 04 March 2019</p>
-				</header>
-				<p>An introduction to discriminative semi-supervised learning approaches for deep learning.</p>
-				<a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="/blog/discriminative-semi-supervised-learning-1">Continue reading</a>
-			</div>
-		</div>
-
-		<hr />
-
-		<div class="row 150%">
-			<div class="3u 4u(large) 12u$(medium)">
-				<div class="image rounded"><img src="/images/publication/thumbnails/mogan.jpg" width="180" alt="" style="border:none;"/></div>
-			</div>
-
-			<div class="9u$ 8u$(large) 12u$(medium)">
-				<header>
-					<h4>Generating Multiple Objects at Spatially Distinct Locations</h4>
-					<p>Posted on 09 January 2019</p>
-				</header>
-				<p>This is a summary of our paper <a href='https://openreview.net/forum?id=H1edIiA9KQ' target="_blank">"Generating Multiple Objects at Spatially Distinct Locations"</a> published at this year's International Conference on Learning Representations.
-				The goal of this work is to control not only what kind of objects are generated within an image, but also where these objects should be located.</p>
-				<a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="https://tohinz.github.io/multiple-objects-gan/" target="_blank">Continue reading</a>
-			</div>
-		</div>
-		<br>
-		<a href="/index.html#blog" class="btn btn-primary btn-lg" role="button" style="text-decoration: none">Back to Home</a>
-		<hr />
+		{% endfor %}
 	</div>
 </section>
+
+
+<!-- Pagination links -->
+<div class="pagination">
+  {% if paginator.previous_page %}
+      <p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="{{ paginator.previous_page_path }}">Previous</a></p>&nbsp;&nbsp;&nbsp;&nbsp;
+  {% endif %}
+  <span class="page_number ">
+    Page: {{ paginator.page }} of {{ paginator.total_pages }}
+  </span>
+  {% if paginator.next_page %}
+      &nbsp;&nbsp;&nbsp;&nbsp;<p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="{{ paginator.next_page_path }}">Next</a></p>
+  {% endif %}
+</div>
