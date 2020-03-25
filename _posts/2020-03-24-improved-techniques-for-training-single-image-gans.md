@@ -60,9 +60,9 @@ where $r=0.75$ is used as default value for the scaling factor and $x_N$ is the 
 
 We can downsample the images more aggressively to train the model on fewer stages, e.g. by using $r=0.55$. However, if we do this with the original rescaling approach the generated images lose much of their global coherence.
 
-We observe that this is the case when there are not enough stages at low resolution (roughly fewer than $60$ pixels at the longer side). Consequently, to achieve a image consistency we need a certain number of stages (usually at least three) at low resolution. However, we observe that we do not need many stages a high resolution. Based on this observation we adapt the rescaling to not be strictly geometric (i.e.\ $x_n = x_N\times r^{N-n}$), but instead to keep the density of low-resolution stages higher than the density of high-resolution stages:
+We observe that this is the case when there are not enough stages at low resolution (roughly fewer than 60 pixels at the longer side). Consequently, to achieve a image consistency we need a certain number of stages (usually at least three) at low resolution. However, we observe that we do not need many stages a high resolution. Based on this observation we adapt the rescaling to not be strictly geometric (i.e. $x_n = x_N\times r^{N-n}$), but instead to keep the density of low-resolution stages higher than the density of high-resolution stages:
 \begin{equation}
-    x_n = x_N\times r^{((N-1)/\textit{log}(N))*\textit{log}(N-n)+1} \text{\ for\ } n=0, ..., N-1.
+    x_n = x_N\times r^{((N-1)/\textit{log}(N))*\textit{log}(N-n)+1}\ \text{for}\ n=0, ..., N-1.
 \end{equation}
 
 For example, for an image $x_N$ of resolution 188x250 px using the new and old rescaling approaches leads to the following resolutions:
