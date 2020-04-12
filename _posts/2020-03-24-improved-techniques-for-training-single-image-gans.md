@@ -81,7 +81,7 @@ We observe that this is the case when there are not enough stages at low resolut
 
 For example, for an image $x_N$ of resolution 188x250 px using the new and old rescaling approaches leads to the following resolutions:
 
-\begin{aligned}
+<span style="display: block;height: 114px;overflow: scroll !important;">\begin{aligned}
 10&\text{ Stages - Old Rescaling: }\mkern-38mu &&25\times34, 32\times42, 40\times53, 49\times66,\ \ 62\times82, \ \ \ \ 77\times102, 96\times128, 121\times160, 151\times200, 188\times250 \\\ 
 10&\text{ Stages - New Rescaling: }\mkern-38mu &&25\times34, 28\times37, 31\times41, 35\times47,\ \ 41\times54,\ \ \\ \ 49\times65,\ \ 62\times82,\ \ \ \ 86\times114, 151\times200, 188\times250 \\\
 6&\text{ Stages - Old Rescaling: }\mkern-38mu &&25\times34, 38\times50, 57\times75, 84\times112,126\times167,188\times250 \\\ 
