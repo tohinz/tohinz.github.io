@@ -20,7 +20,7 @@
 
 	figure {
 		position: relative;
-		margin: 0;
+		margin: 10px;
 		padding: 10px;
 		border: 0;
 		font-size: 100%;
@@ -39,10 +39,6 @@
 
 	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
 		display: block;
-	}
-
-	body {
-		line-height: 1;
 	}
 
 	ol, ul {
@@ -1626,7 +1622,7 @@
 		font-family: "Raleway", Arial, Helvetica, sans-serif;
 		font-size: 13pt;
 		font-weight: 400;
-		line-height: 2em;
+		line-height: 1.5em;
 	}
 
 		@media screen and (max-width: 1680px) {
@@ -1695,7 +1691,7 @@
 		color: #484848;
 		font-weight: 700;
 		line-height: 1em;
-		margin: 0 0 1em 0;
+		margin: 2em 0 1em 0;
 		text-transform: uppercase;
 	}
 
@@ -2413,12 +2409,12 @@
 	}
 
 		ol li {
-			padding-left: 0.25em;
+			padding-left: 0.5em;
 		}
 
 	ul {
 		list-style: disc;
-		margin: 0 0 2em 0;
+		margin: -2em 0 2em 0;
 		padding-left: 1em;
 	}
 

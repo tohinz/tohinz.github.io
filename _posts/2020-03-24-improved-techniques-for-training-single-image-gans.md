@@ -25,7 +25,7 @@ You can even use them for tasks such as image animation as seen in Fig. 4.
 
 The first work that introduced GANs for unconditional image generation trained on a *single natural* image was [SinGAN](https://arxiv.org/abs/1905.01164){:target="_blank"}, presented at ICCV 2019. Before that, several other approaches trained GANs on single images, however, these images where either not *natural* images (e.g. [these](https://link.springer.com/chapter/10.1007/978-3-319-46487-9_43){:target="_blank"} [approaches](https://arxiv.org/abs/1705.06566){:target="_blank"} [for](https://arxiv.org/abs/1805.04487){:target="_blank"} texture synthesis) or the task was not to learn an unconditional model (e.g. [InGAN](https://arxiv.org/abs/1812.00231){:target="_blank"} for image retargeting). This blog post summarizes our paper [Improved Techniques for Training Single-Image GANs](https://www.google.com){:target="_blank"} in which we look into several mechanisms that improve the training and generation capabilities of GANs on single images. 
 
-Our main contributions, which we will summarize in the following post, are:
+Our main contributions, which we will summarize in the following post, are:  
 
 - training architecture and optimization: we identify several aspects of the architecture and optimization process that are critical to the success of training Single-Image GANs;
 - rescaling approach for multi-stage training on different resolutions: the approach to rescale images for the different training stages directly affects the number of stages we need to train on;

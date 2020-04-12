@@ -13,7 +13,7 @@ This blog post summarizes the highlights of our paper [Semantic Object Accuracy 
 
 
 
-# Semantic Object Accuracy (SOA)
+### Semantic Object Accuracy (SOA)
 
 Our evaluation metric, which we call *Semantic Object Accuracy* (SOA), tries to address some problems that current popular evaluation metrics for TTI tasks suffer from. In the following, we will quickly highlight these problems and then describe how the SOA tries to address them.
 
@@ -51,11 +51,11 @@ The SOA addresses all previously mentioned problems since it 1) takes the image 
 
 
 
-# Our Model
+### Our Model
 
 The model is an extension and adaptation of our [ICLR paper](https://arxiv.org/abs/1901.00686){:target="_blank"} from this year. It adds object pathways to the generator and discriminator of a Generative Adversarial Net (GAN). These object pathways are responsible for explicitly modeling individual objects within images and do improve the performance considerably compared to the baseline [AttnGAN](https://arxiv.org/abs/1711.10485){:target="_blank"} model. In contrast to the previous model we have object pathways on all discriminators, as well as on multiple layers throughout the generator. Furthermore, we update the loss function that is used to train the generator and increase the number of objects with which we train. For further details please refer to Section 3 (Approach) in our [paper](https://arxiv.org/abs/1910.13321){:target="_blank"}.
 
-# Evaluation
+### Evaluation
 
 We evaluate both our model and several state-of-the-art approaches with available pre-trained models. Besides calculating the SOA scores for all of these models we also compare the IS, FID, and R-precision.
 
