@@ -3,7 +3,7 @@ layout: blog
 title: Improved Techniques for Training Single-Image GANs
 author: Tobias Hinz
 date: 2020-03-24
-description: Overview of our paper about training GANs on a single image for several different tasks.
+description: Overview of our paper about training GANs on a single image for tasks such as image generation, image harmonization, and image animation.
 thumbnail: /images/publication/thumbnails/consingan.jpg
 mathjax: true
 comments: true
