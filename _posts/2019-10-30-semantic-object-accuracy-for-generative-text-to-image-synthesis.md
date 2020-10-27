@@ -79,6 +79,8 @@ Overall, we find there are three characteristics that predict whether models are
 
 Despite this short coming we still think the SOA can be an important metric for evaluating generative text-to-image models, since it gives us a much more detailed insight into the generation capabilities of a model. Furthermore, the only requirement is an object detector that works on the dataset we work on and pre-trained object detectors are readily available for many datasets that are used in research.
 
+In order to further validate our results, we also performed a user study on Amazon Mechanical Turk. Similar to other approaches we sampled 5,000 random captions from the COCO validation set and showed people a given caption and the respective generated images. We then asked them to choose the image that depicts  the  given  caption  best.  Our results show that the human ranking closely reflects the ranking obtained through the SOA and FID scores. However, we find that the IS score is not predictive of the performance in the user study. The R-precision and CIDEr are somewhat predictive, but predict a different ranking of the top-three performing models.
+
 Please check out our [paper](https://arxiv.org/abs/1910.13321){:target="_blank"} for more detailed analyses of our model as well as the other models we compared our model with. The code to use the calculate the SOA scores on the MS-COCO dataset is available [here](https://github.com/tohinz/semantic-object-accuracy-for-generative-text-to-image-synthesis){:target="_blank"}.
 
 
