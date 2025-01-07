@@ -83,74 +83,109 @@ description: I work with generative neural networks to model and understand the 
 
 <!-- Shipped Features -->
 <section id="blog" class="wrapper style1 special">
-	<div class="container 75%">
+	<div class="container">
 		<h2 style="text-align: center">Features I Worked On</h2>
 		<style>
-			table {
-				width: 60%;
-				/* Adjust the width as needed */
+			.features-grid {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 2rem;
+				max-width: 1200px;
 				margin: 0 auto;
-				/* This centers the table */
-				border-collapse: collapse;
+				padding: 1rem;
 			}
 
-			th,
-			td {
-				border: 1px transparent #ddd;
-				padding: 20px;
-				text-align: center;
-			}
-
-			td:nth-child(2) {
-				padding-right: 15%;
-				/* Add padding to the right of the second column */
-			}
-
-			.image-container {
+			.feature-card {
 				display: flex;
-				justify-content: center;
-				/* Horizontally center the image */
 				align-items: center;
-				/* Vertically center the image */
-				height: 100%;
-				/* Ensure the container takes the full height of the cell */
+				gap: 1.5rem;
+				padding: 1.5rem;
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 8px;
 			}
 
-			img {
+			.feature-image {
+				flex-shrink: 0;
 				width: 150px;
-				/* Adjust the size as needed */
-				height: auto;
+				height: 150px;
+				object-fit: cover;
+				border-radius: 4px;
+			}
+
+			.feature-content {
+				flex-grow: 1;
+			}
+
+			.feature-content a {
+				font-size: 1.1rem;
+				font-weight: bold;
+				text-decoration: none;
+			}
+
+			.feature-content .date {
+				font-weight: bold;
+				margin: 0.5rem 0;
+			}
+
+			.feature-content .description {
+				font-size: 0.9rem;
+				line-height: 1.4;
+			}
+
+			@media (max-width: 768px) {
+				.features-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.feature-card {
+					flex-direction: column;
+					text-align: center;
+				}
+
+				.feature-image {
+					width: 120px;
+					height: 120px;
+				}
 			}
 		</style>
-		<table>
-			<tr>
-				<td><img src="images/features/adobe_firefly_video.jpg" alt="Image 2"></td>
-				<td><a href="https://blog.adobe.com/en/publish/2024/09/11/bringing-gen-ai-to-video-adobe-firefly-video-model-coming-soon"
-						target="_blank">Adobe Firefly Video Model</a><br><b>October 2024</b><br>Oversaw technical
-					development
-					of the video model including training of the models and data preparation.</td>
-				<td><img src="images/features/adobe_genextend.jpg" alt="Image 2"></td>
-				<td><a href="https://blog.adobe.com/en/publish/2024/10/14/generative-extend-in-premiere-pro"
-						target="_blank">Adobe Firefly Video GenExtend</a><br><b>October 2024</b><br>Consulted on
-					training and
-					development approaches.</td>
-			</tr>
-			<tr>
-				<td><img src="images/features/adobe_firefly.jpg" alt="Image 2"></td>
-				<td><a href="https://news.adobe.com/news/news-details/2023/adobe-releases-next-generation-of-firefly-models"
-						target="_blank">Adobe Firefly Image Model v2</a><br><b>October 2023</b><br>Developed and trained
-					parts
-					of the model; oversaw overall technical development of the core diffusion model.</td>
-				<td><img src="images/features/adobe_firefly.jpg" alt="Image 1"></td>
-				<td><a href="https://news.adobe.com/news/news-details/2023/adobe-unveils-firefly-a-family-of-new-creative-generative-ai"
-						target="_blank">Adobe Firefly Image Model</a><br><b>April 2023</b><br>Started the effort that
-					would
-					ultimately result in the foundation of Adobe Firefly; developed and trained the core diffusion
-					model.</td>
-			</tr>
 
-			<!-- Add more rows as needed -->
-		</table>
+		<div class="features-grid">
+			<div class="feature-card">
+				<img class="feature-image" src="images/features/adobe_firefly_video.jpg" alt="Adobe Firefly Video">
+				<div class="feature-content">
+					<a href="https://blog.adobe.com/en/publish/2024/09/11/bringing-gen-ai-to-video-adobe-firefly-video-model-coming-soon" target="_blank">Adobe Firefly Video Model</a>
+					<div class="date">October 2024</div>
+					<div class="description">Oversaw technical development of the video model including training of the models and data preparation.</div>
+				</div>
+			</div>
+
+			<div class="feature-card">
+				<img class="feature-image" src="images/features/adobe_genextend.jpg" alt="Adobe GenExtend">
+				<div class="feature-content">
+					<a href="https://blog.adobe.com/en/publish/2024/10/14/generative-extend-in-premiere-pro" target="_blank">Adobe Firefly Video GenExtend</a>
+					<div class="date">October 2024</div>
+					<div class="description">Consulted on training and development approaches.</div>
+				</div>
+			</div>
+
+			<div class="feature-card">
+				<img class="feature-image" src="images/features/adobe_firefly.jpg" alt="Adobe Firefly v2">
+				<div class="feature-content">
+					<a href="https://news.adobe.com/news/news-details/2023/adobe-releases-next-generation-of-firefly-models" target="_blank">Adobe Firefly Image Model v2</a>
+					<div class="date">October 2023</div>
+					<div class="description">Developed and trained parts of the model; oversaw overall technical development of the core diffusion model.</div>
+				</div>
+			</div>
+
+			<div class="feature-card">
+				<img class="feature-image" src="images/features/adobe_firefly.jpg" alt="Adobe Firefly">
+				<div class="feature-content">
+					<a href="https://news.adobe.com/news/news-details/2023/adobe-unveils-firefly-a-family-of-new-creative-generative-ai" target="_blank">Adobe Firefly Image Model</a>
+					<div class="date">April 2023</div>
+					<div class="description">Started the effort that would ultimately result in the foundation of Adobe Firefly; developed and trained the core diffusion model.</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </section>
 
