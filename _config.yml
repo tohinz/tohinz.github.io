@@ -5,12 +5,19 @@ markdown: kramdown
 url: "https://tohinz.github.io"
 baseurl: ""
 
+# SEO Configuration - Explicitly ensure indexing
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+      robots: "index, follow"
+
 social:
   name: Tobias Hinz
   links:
     - https://www.linkedin.com/in/tobias-hinz-397881123
     - https://github.com/tohinz
-    - https://research.adobe.com/person/tobias-hinz/
 
 # Jekyll Plugins
 plugins:
