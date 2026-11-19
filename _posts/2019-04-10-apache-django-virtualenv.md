@@ -5,6 +5,7 @@ author: Tobias Hinz
 date: 2019-04-10
 description: How to set up your Ubuntu with Apache to serve multiple websites in parallel with the help of virtualenv and mod_wsgi.
 thumbnail: /images/blog/Apache-Django/django-logo-positive.jpg
+image: /images/blog/Apache-Django/django-logo-positive.jpg
 mathjax: false
 comments: true
 ---
@@ -26,7 +27,7 @@ where, if necessary, all websites can use different virtualenvs. This is especia
 [^1]: This guide was written since it took us a while to get this specific configuration running, i.e. serving **multiple** Django websites on a current Ubuntu OS while using different virtualenvs for the different websites. Many of the tutorials we found were for older versions (e.g. Ubuntu 14) and did not serve **multiple** Django websites with **multiple** virtualenvs using only **one** Apache server.
 
 
-# Prerequisites
+## Prerequisites
 We use the following OS and software versions, but later versions should (hopefully) also work:
 * Ubuntu 18.04 LTS
 * Python 3.6.6
@@ -36,7 +37,7 @@ We use the following OS and software versions, but later versions should (hopefu
 * mod_wsgi 4.6.4
 
 
-# 1. Install Apache
+## 1. Install Apache
 We assume you have a running Ubuntu system on which you have sudo rights. The first step is to install the Apache server:
 
     sudo apt-get update
@@ -86,7 +87,7 @@ If you change anything with the language settings, make sure you have the necess
 Now that we have the Apache server set up and running we will continue with the mod_wsgi package.
 
 
-# 2. Install mod_wsgi and virtualenv
+## 2. Install mod_wsgi and virtualenv
 Remember that we use Python 3, so consider setting an alias in your `.bashrc` file to automatically use Python 3:
 
     alias python=python3
@@ -106,7 +107,7 @@ Finally, install the virtualenv environment:
     pip3 install virtualenv
 
 
-# 3. Set Up Your Environment
+## 3. Set Up Your Environment
 Now that we have installed the needed software packages we are ready to set up our environment for the usage of Django. First we create a folder from which we will later on host all our various websites:
 
     mkdir django_websites
@@ -140,7 +141,7 @@ This folder should contain your database, your various apps, the `manage.py` fil
         ...
 
 
-# 4. Setting Up The Website
+## 4. Setting Up The Website
 As a first step we need to adapt the `wsgi.py` file in your Django app so that all the paths point to the location of your virtualenv. 
 
     nano /home/django_websites/django_website_1/core/wsgi.py
@@ -169,7 +170,7 @@ The final `wsgi.py` file should look something like this:
     application = get_wsgi_application()
 
 
-# 5. Setting Up Apache to Serve the Website
+## 5. Setting Up Apache to Serve the Website
 In the next step we will adapt the Apache server's config file (e.g. `/etc/apache2/sites-available/000-default.conf`). 
 
     sudo nano /etc/apache2/sites-available/000-default.conf
@@ -204,7 +205,7 @@ Finally, we need to make sure that Apache knows the link to the virtualenv. Belo
 The **first** line spawns a WSGI daemon process called `django_website_1` that is responsible for serving the Django application. The daemon name can essentially be anything but it is good practice to use descriptive names such as application names here. Since we are using a virtual environment we need to specify the alternate Python path so that mod_wsgi will know where to look for Python packages. The path must contain two directories, delimited by a colon: the directory of the Django project itself (`/home/django_websites/django_website_1`) and the directory of the Python packages inside our virtual environment for that project (`/home/django_websites/django-virtualenv/lib/python3.6/site-packages`). The **second** line tells that particular virtual host to use the WSGI daemon created beforehand and, as such, the daemon name must match between those two. The **third** line tells Apache and mod_wsgi where to find the WSGI configuration we modified in the previous step.
 
 
-# 6. Setting Access Rights and Restarting Apache
+## 6. Setting Access Rights and Restarting Apache
 Finally, assign the correct access rights (choose which access rights are the ones you need specifically) to your website(s) (specifically the database and the media/static folders) and restart the Apache server:
 
     sudo chmod -R 766 /home/django_websites/django_website_1/
@@ -223,7 +224,7 @@ or try to run your website locally and see what kind of errors you get:
     /home/django_websites/django-virtualenv/bin/python /home/django_websites/django_website_1/manage.py runserver
 
 
-# 7. Adding New Websites
+## 7. Adding New Websites
 If you want to add additional websites just add the folder containing the website files (and potentially a new virtualenv) to `/home/django_websites/` and continue with [4.](#4-setting-up-the-website), [5.](#5-setting-up-apache-to-serve-the-website), and [6.](#6-setting-access-rights-and-restarting-apache)
 When modifying the Apache config file, add the new text blog underneath the already existing one for the previous website. **Do not mix/interleave these text blogs, but keep them separate in the config file**, e.g.
 
@@ -266,7 +267,7 @@ When modifying the Apache config file, add the new text blog underneath the alre
 If you want to delete any of the website, just delete the folder (and accompanying virtualenvs) from the `/home/django_websites/` folder and delete the corresponding text blog from the Apache config file.
 
 
-# 8. Configure Default Apache Website
+## 8. Configure Default Apache Website
 The default Apache website, i.e. the website that is shows when you access
 
     www.myserver.com

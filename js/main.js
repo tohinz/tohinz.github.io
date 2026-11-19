@@ -22,11 +22,17 @@
 		// Disable animations/transitions until the page has loaded.
 			$body.addClass('is-loading');
 
-			$window.on('load', function() {
+			function pageLoaded() {
 				window.setTimeout(function() {
 					$body.removeClass('is-loading');
 				}, 100);
-			});
+			}
+
+			// jQuery 3 runs ready handlers asynchronously, so "load" may already have fired.
+			if (document.readyState === 'complete')
+				pageLoaded();
+			else
+				$window.on('load', pageLoaded);
 
 		// Fix: Placeholder polyfill.
 			$('form').placeholder();
@@ -41,15 +47,21 @@
 
 		// Off-Canvas Navigation.
 
-			// Navigation Panel Toggle.
-				$('<a href="#navPanel" class="navPanelToggle"></a>')
+			// Title Bar (only visible on medium and below, where #header is hidden).
+				$(
+					'<div id="titleBar">' +
+						'<a href="#navPanel" class="toggle" aria-label="Open menu"></a>' +
+						'<a href="/" class="title">Tobias Hinz</a>' +
+					'</div>'
+				)
 					.appendTo($body);
 
-			// Navigation Panel.
+			// Navigation Panel (nav links + social icons from #header).
 				$(
-					'<div id="navPanel">' +
-						$('#nav').html() +
-						'<a href="#navPanel" class="close"></a>' +
+					'<div id="navPanel" aria-label="Menu">' +
+						'<nav>' + $('#nav').html() + '</nav>' +
+						'<ul class="icons">' + $('#header ul.icons').html() + '</ul>' +
+						'<a href="#navPanel" class="close" aria-label="Close menu"></a>' +
 					'</div>'
 				)
 					.appendTo($body)
@@ -59,7 +71,7 @@
 						hideOnSwipe: true,
 						resetScroll: true,
 						resetForms: true,
-						side: 'right'
+						side: 'left'
 					});
 
 			// Fix: Remove transitions on WP<10 (poor/buggy performance).

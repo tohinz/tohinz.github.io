@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tohinz.github.io/sitemap.xml 
+Sitemap: https://www.tobiashinz.com/sitemap.xml 

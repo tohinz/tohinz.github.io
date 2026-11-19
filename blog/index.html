@@ -1,39 +1,40 @@
 ---
 layout: default
-title: Tobias Hinz - Blog
+title: Blog
 ---
 <!-- This loops through the paginated posts -->
 <section id="blog" class="wrapper style2 special">
 	<div class="container 75%">
-		{% for page in paginator.posts %}
-		  <ul class="row 150%">
-			<ul class="3u 4u(large) 12u$(medium)">
-				<div class="image rounded"><img src="{{ page.thumbnail }}" width="180" alt="" style="border:none;"/></div>
-			</ul>
+		<h1 class="sr-only">Blog</h1>
+		{% for post in paginator.posts %}
+		<div class="row 150%">
+			<div class="3u 4u(large) 12u$(medium)">
+				<div class="image rounded"><img loading="lazy" decoding="async" src="{{ post.thumbnail }}" width="180" alt="" style="border:none;"/></div>
+			</div>
 
-			<ul class="9u$ 8u$(large) 12u$(medium)">
+			<div class="9u$ 8u$(large) 12u$(medium)">
 				<header>
-					<h4><a href="{{ page.url }}">{{ page.title }}</a></h4>
-					<p>Posted on {{ page.date | date: "%d %b %Y" }} | Reading time: {% include read_time.html %}</p>
+					<h2 class="pub-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+					<p>Posted on {{ post.date | date: "%d %b %Y" }} | Reading time: {% include read_time.html content=post.content %}</p>
 				</header>
-				<p>{{ page.description }}</p>
-				<p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="{{ page.url }}">Continue reading</a></p>
-			</ul>
-		</ul>
+				<p>{{ post.description }}</p>
+				<p><a class="btn btn-primary btn-sm" style="text-decoration: none" href="{{ post.url }}" aria-label="Continue reading: {{ post.title | escape }}">Continue reading</a></p>
+			</div>
+		</div>
 		{% endfor %}
 	</div>
 </section>
 
 
 <!-- Pagination links -->
-<div class="pagination">
+<nav class="pagination" aria-label="Blog pages">
   {% if paginator.previous_page %}
-      <p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="{{ paginator.previous_page_path }}">Previous</a></p>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p><a class="btn btn-primary btn-sm" style="text-decoration: none" href="{{ paginator.previous_page_path }}">Previous</a></p>&nbsp;&nbsp;&nbsp;&nbsp;
   {% endif %}
   <span class="page_number ">
     Page: {{ paginator.page }} of {{ paginator.total_pages }}
   </span>
   {% if paginator.next_page %}
-      &nbsp;&nbsp;&nbsp;&nbsp;<p><a class="btn btn-primary btn-sm" role="button" style="text-decoration: none" href="{{ paginator.next_page_path }}">Next</a></p>
+      &nbsp;&nbsp;&nbsp;&nbsp;<p><a class="btn btn-primary btn-sm" style="text-decoration: none" href="{{ paginator.next_page_path }}">Next</a></p>
   {% endif %}
-</div>
+</nav>

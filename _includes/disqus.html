@@ -3,15 +3,32 @@
 <script>
     var disqus_config = function () {
         this.page.url = '{{ page.url | absolute_url }}';
-        this.page.identifier = '{{ page.url | absolute_url }}';
+        /* Threads were created when the site lived at tohinz.github.io; keep that identifier so existing comments stay attached. */
+        this.page.identifier = 'https://tohinz.github.io{{ page.url }}';
     };
     (function() {
-        var d = document, s = d.createElement('script');
-        
-        s.src = 'https://https-tohinz-github-io.disqus.com/embed.js';
-        
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
+        var loaded = false;
+        function loadDisqus() {
+            if (loaded) return;
+            loaded = true;
+            var d = document, s = d.createElement('script');
+            s.src = 'https://{{ site.disqus.shortname }}.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+        /* Only load Disqus once the reader scrolls near the comments. */
+        var thread = document.getElementById('disqus_thread');
+        if ('IntersectionObserver' in window && thread) {
+            var observer = new IntersectionObserver(function(entries) {
+                if (entries[0].isIntersecting) {
+                    observer.disconnect();
+                    loadDisqus();
+                }
+            }, { rootMargin: '600px 0px' });
+            observer.observe(thread);
+        } else {
+            loadDisqus();
+        }
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>

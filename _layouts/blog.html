@@ -5,7 +5,7 @@ layout: default
 <section id="one" class="wrapper style1">
 	<div class="container 75%">
 		<header>
-			<h2 style="text-align: center">{{ page.title }}</h2>
+			<h1 class="post-title" style="text-align: center">{{ page.title }}</h1>
 			<p style="text-align: center">{{ page.author }}</p>
 			<p style="text-align: center">
 				{{ page.date | date_to_long_string }}
@@ -15,7 +15,7 @@ layout: default
 		</header>
 	</div>
 </section>
-<div align="justify">
+<div class="post-body">
 {{ content }}
 </div>
 {% include disqus.html %}

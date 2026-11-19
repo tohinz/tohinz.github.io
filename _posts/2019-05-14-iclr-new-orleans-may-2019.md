@@ -5,6 +5,7 @@ author: Tobias Hinz
 date: 2019-05-15
 description: My impressions from the International Conference on Learning Representations (ICLR) 2019 in New Orleans and an overview of papers and keynotes I found particularly interesting
 thumbnail: /images/blog/ICLR2019-Impressions/iclr-logo.jpg
+image: /images/blog/ICLR2019-Impressions/iclr-logo.jpg
 mathjax: true
 comments: true
 ---
@@ -16,7 +17,7 @@ This is a summary of my impressions from this year’s [ICLR](https://iclr.cc/Co
 For a nice, one-sentence summary of all accepted papers check out the summaries from [Paper Digest](http://www.paperdigest.org/2019/05/iclr-2019-highlight/){:target="_blank"} and many of the posters can be found [here](https://postersession.ai/){:target="_blank"} (thanks to [Jonathan Binas](http://www.jbinas.com/){:target="_blank"} and [Avital Oliver](http://aoliver.org/about/){:target="_blank"} for organizing this).
 
 
-# General impressions
+## General impressions
 
 The conference took place in the Ernest N. Morial Convention Center in New Orleans. It's a nice convention center, located in the CBD of New Orleans, with plenty of space, a food court, Starbucks, and other amenities you might need.
 
@@ -26,7 +27,7 @@ The conference officially started on Monday, 6. May 2019. Luckily, I already pic
 <blockquote class="twitter-tweet tw-align-center" data-lang="en"><p lang="en" dir="ltr">Someone thought they could have simply registered in the morning 🤣🤣🤣<br>Newbies! <a href="https://twitter.com/hashtag/ICLR2019?src=hash&amp;ref_src=twsrc%5Etfw">#ICLR2019</a> <a href="https://t.co/iZmgYYTquK">pic.twitter.com/iZmgYYTquK</a></p>&mdash; Alfredo Canziani @ ICLR (@alfcnz) <a href="https://twitter.com/alfcnz/status/1125399067490684928?ref_src=twsrc%5Etfw">6. Mai 2019</a></blockquote>
 Alexander Rush officially opened the conference at 8.45am (before the first keynote at 9am). After some general statistics about the development of the conference (the number of submissions reached another all-time high of almost 1,500 including more than 6,000 authors, about 500 accepted papers, and more than 3,000 registered visitors) his main message was focused on inclusion and diversity. 
 
-<center><img src="/images/blog/ICLR2019-Impressions/iclr-opening.jpg" alt="ICLR Opening" width="50%"/></center>
+<center><img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-opening.jpg" alt="ICLR Opening" width="50%"/></center>
 This is one of the main reasons that the conference will take place in Africa next year, to acknowledge the small number of minorities present at large ML conferences. One of the big issues for many people is to obtain valid visas to enter the USA and Canada to visit conferences, and in fact, many researchers have not been able to obtain visas to visit last year’s NeurIPS and ICLR. Alexander also acknowledged that there was some backlash about the rights of the LGBTQ community in Africa and assured that the conference committee is in contact with the government in order to make all potential attendants feel welcome and safe.
 
 <blockquote class="twitter-tweet tw-align-center" data-lang="en"><p lang="en" dir="ltr">ICLR 2020 will be in Addis! Exciting news not only to reduce the visa issues that have plagued recent conferences, but also because I think many of my colleagues will be inspired by the wave of AI used for good that is sweeping through Africa right now. <a href="https://t.co/T014bPe0g9">https://t.co/T014bPe0g9</a></p>&mdash; Sara Hooker (@sarahookr) <a href="https://twitter.com/sarahookr/status/1064190324686376960?ref_src=twsrc%5Etfw">18. November 2018</a></blockquote>
@@ -38,8 +39,8 @@ I chose to stay for the oral presentations (which were definitely worthwhile), b
 
 The coffee breaks and the receptions took place in a big hall, which is also where all the sponsors had their booths. The catering for the coffee breaks was nice, with plenty of coffee (decaf was also available), snacks, fruit, and yogurt. 
 
-<img src="/images/blog/ICLR2019-Impressions/iclr-sponsors.jpg" alt="ICLR Sponsors" width="49%"/>
-<img src="/images/blog/ICLR2019-Impressions/iclr-sponsors-2.jpg" alt="ICLR Sponsors" width="49%"/>
+<img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-sponsors.jpg" alt="ICLR Sponsors" width="49%"/>
+<img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-sponsors-2.jpg" alt="ICLR 2019 sponsor booths" width="49%"/>
 
 In fact, you could even get free massages!
 
@@ -57,12 +58,12 @@ The overall structure was the same for each day: the morning started with an inv
 <blockquote class="twitter-tweet tw-align-center" data-lang="en"><p lang="und" dir="ltr">🧙🧙‍♂️🧙‍♀️ <a href="https://t.co/AmyNx4jeAJ">pic.twitter.com/AmyNx4jeAJ</a></p>&mdash; ICLR 2019 (@iclr2019) <a href="https://twitter.com/iclr2019/status/1126528587245527041?ref_src=twsrc%5Etfw">9. Mai 2019</a></blockquote>
 This worked pretty well even though two hours are quite a short time to look at all presented posters (70-80 new posters per slot). Posters were also clustered so that each session represented (roughly) a given research direction. For example, Tuesday morning was focused on GANs while Tuesday evening was focused on adversarial attacks and defenses as well as robustness in general. The posters on Wednesday morning focused on Reinforcement Learning, continual and active learning, and meta-learning, while Wednesday evening targeted optimizers, (training) convergence, learning theory, compression, and quantization. Finally, Thursday morning showed posters about RNNs, NLP and language modeling, Seq2Seq models, and various "translation" tasks (TTS, language translation, Music, etc), and Thursday evening concluded with generative models, low precision training, meta-learning, domain adaptation, compression, BNNs, and Variational Bayes.
 
-<img src="/images/blog/ICLR2019-Impressions/iclr-poster-hall.jpg" alt="ICLR Sponsors" width="49%"/>
-<img src="/images/blog/ICLR2019-Impressions/iclr-poster-hall-2.jpg" alt="ICLR Sponsors" width="49%"/>
+<img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-poster-hall.jpg" alt="ICLR 2019 poster hall" width="49%"/>
+<img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-poster-hall-2.jpg" alt="Attendees at an ICLR 2019 poster session" width="49%"/>
 
 While I felt that this grouping was nice in that each poster session felt like one coherent session there was also some discussion about this form. Many people complained that the focus on one (or few) topic(s) per session made it impossible for a person specifically interested in one topic (say RL) to look at all posters of that topic. For example, a person mainly interested in RL had only two hours on Wednesday morning to go through (almost) all papers/posters about RL, which is not enough time if you really want to dig deeper into the content of multiple posters.
 
-<center><img src="/images/blog/ICLR2019-Impressions/microsoft-unis.jpg" alt="ICLR Sponsors" width="50%"/></center>
+<center><img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/microsoft-unis.jpg" alt="ICLR 2019 industry expo" width="50%"/></center>
 Another novelty at this year's ICLR was an (industry) expo, which took place in the Tuesday lunch break, some of the sponsors introduced their work. Since I presented our poster on Tuesday morning from 11am-1pm I got to the event 15 minutes late but was still able to join the Google AI session with Pablo Castro about Machine Learning for Musical Creativity. The talk was about how we can use machine learning models to support people in the creative process of music generations. Overall, the presentation was quite entertaining and included a live presentation of the system towards the end.
 
 <blockquote class="twitter-tweet tw-align-center" data-lang="en"><p lang="en" dir="ltr">Happening in 50 minutes in R09.<br>Come hear about some of my research on using machine learning for creative purposes, and come listen to me do collaborative musical improvisation with some <a href="https://twitter.com/hashtag/ML?src=hash&amp;ref_src=twsrc%5Etfw">#ML</a> models!<br>🤖🎹🥁 <a href="https://t.co/EAqJN3wjK8">https://t.co/EAqJN3wjK8</a></p>&mdash; Pablo Samuel Castro (@pcastr) <a href="https://twitter.com/pcastr/status/1125810751753654273?ref_src=twsrc%5Etfw">7. Mai 2019</a></blockquote>
@@ -74,22 +75,22 @@ I went to an event hosted by DeepMind close to the Convention Center. There was 
 
 Each day featured two keynote speakers. I attended most of them and found them insightful and interesting. Others have already done a good job at summarizing them so I will not talk about them here. See for example David Abel's [summary](https://david-abel.github.io/notes/iclr_2019.pdf){:target="_blank"} or this [summary](https://go.technologyreview.com/can-machine-learning-help-us-understand-why){:target="_blank"} about Léon Bottou's talk. You can also watch most of the talks [here](https://www.facebook.com/pg/iclr.cc/videos/?ref=page_internal){:target="_blank"}. This year there was also a debate moderated by Leslie Kaelbing about how much structure/priors/implicit knowledge we should implement in our models. The debate was led by Doina Precup, Jeff Clune (both advocate learning as much as possible from data), Suchi Saria, and Josh Tenenbaum (who advocate for the advantages of using priors in our models). The debate was quite entertaining (especially the second half) and you can watch it [here](https://www.facebook.com/iclr.cc/videos/1323173737834962/){:target="_blank"} (starts at around 23 min).
 
-<center><img src="/images/blog/ICLR2019-Impressions/iclr-debate.jpg" alt="Ernest N. Morial Convention Center" width="50%"/></center>
+<center><img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-debate.jpg" alt="Panel debate on stage at ICLR 2019" width="50%"/></center>
 The debate also allowed for interaction with the audience, who could ask (and upvote) questions online. While a lot of people used the platform to ask questions, some people also posted questions under the name of famous (at least in the community) people (you could write any name when asking a question).
 
-<img src="/images/blog/ICLR2019-Impressions/iclr-debate-questions1.PNG" alt="Ernest N. Morial Convention Center" width="33%"/>
-<img src="/images/blog/ICLR2019-Impressions/iclr-debate-questions2.PNG" alt="Ernest N. Morial Convention Center" width="33%"/>
-<img src="/images/blog/ICLR2019-Impressions/iclr-debate-questions3.PNG" alt="Ernest N. Morial Convention Center" width="33%"/>
+<img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-debate-questions1.PNG" alt="Screenshot of audience questions submitted online during the ICLR 2019 debate (1 of 3)" width="33%"/>
+<img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-debate-questions2.PNG" alt="Screenshot of audience questions submitted online during the ICLR 2019 debate (2 of 3)" width="33%"/>
+<img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/iclr-debate-questions3.PNG" alt="Screenshot of audience questions submitted online during the ICLR 2019 debate (3 of 3)" width="33%"/>
 
 This led to some discussion later on (somewhat ironically) Facebook about data privacy and identity protection. Some people also complained that the panel asked the questions (allegedly) posted by famous persons while ignoring other questions (which had more upvotes). Nevertheless, overall I liked the debate and would like to see events like this more often at conferences.
 
 After the last oral presentation on Thursday afternoon, Yoshua Bengio took the stage and officially announced that the conference will take place in Addis Ababa (Ethiopia) next year to foster inclusivity and to highlight ongoing research in Africa.
 
-<center><img src="/images/blog/ICLR2019-Impressions/bengio.jpg" alt="Ernest N. Morial Convention Center" width="50%"/></center>
+<center><img loading="lazy" decoding="async" src="/images/blog/ICLR2019-Impressions/bengio.jpg" alt="Yoshua Bengio on stage announcing the next ICLR venue" width="50%"/></center>
 The conference concluded with a reception Thursday night with an open bar and food, including some specialties such as New Orleans Pralines and Bread Pudding. Overall, I really enjoyed the conference, its high-quality presentations and posters, the invited keynote speakers, and the chance to talk to both academic and industrial researchers. Read on to get a summary of the keynotes and the ICLR debate in the next part, as well as an overview of some papers I found particularly interesting in the third part.
 
 
-# Papers I Liked
+## Papers I Liked
 On Monday there were only oral presentations, but no posters (because of the workshops). Two of the oral presentations were about generative models and image generation: [BigGAN](https://arxiv.org/abs/1809.11096){:target="_blank"} showed that making GANs larger and increasing the batch size can drastically improve the image quality ([Dogball](https://twitter.com/ajmooch/status/1125209919454629888){:target="_blank"} anyone?), while [this work](https://arxiv.org/abs/1812.01608){:target="_blank"} introduced some new tricks for autoregressive models for synthesizing large images in an unconditional way. In the afternoon, there was a presentation on [how powerful Graph Neural Networks](https://arxiv.org/abs/1810.00826){:target="_blank"} are (hint: under certain conditions as powerful as the [Weisfeiler-Lehman graph isomorphism test](https://blog.smola.org/post/33412570425/the-weisfeiler-lehman-algorithm-and-estimation-on){:target="_blank"}).
 
 Finally, we had a presentation on one of the two papers that received a best paper award: the [Lottery Ticket Hypothesis](https://arxiv.org/abs/1803.03635){:target="_blank"}. It is common knowledge that most (large) neural networks don't need to be that large to actually reach good performance. In fact, by pruning a large, trained neural network (e.g. by removing connections with small weights) we can usually reduce the size of the network considerably without a loss in performance. However, a puzzling observation so far was that we can not simply take the smaller, pruned network and train it from scratch. One of the main observations in the paper is that we can actually retrain the pruned network from scratch (and the retrained network can even achieve better performance than the original, larger network) if we initialize the weights of the leftover connections to the exact same initial values as in the original network (instead of initializing them randomly). [Follow-up work](https://eng.uber.com/deconstructing-lottery-tickets/){:target="_blank"} on this has shown that it might actually be the sign of the initial weight that is most important, not the exact value. While this is interesting work, one problem remains: we still have no way of "finding" the trainable sub-network a-priori, i.e. we still need to train the large network first to find the small network. [Concurrent work](https://arxiv.org/abs/1810.05270){:target="_blank"} also presented at the ICLR obtains similar results, but shows that for structured pruning algorithms (e.g. channel or kernel wise pruning) one can train the smaller network from scratch even with a random weight initialization. This indicates that it is the architecture of the pruned network (not the preserved weights) that is most important for the final performance.

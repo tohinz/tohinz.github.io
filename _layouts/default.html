@@ -5,18 +5,18 @@ layout: compress
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>{{ page.title }}</title>
 		{% include head.html %}
 		{% include mathjax.html %}
 		{% seo %}
 	</head>
 	<body>
+		<a class="skip-link" href="#content">Skip to content</a>
 		<!-- Header -->
-		{% include_cached header.html %}
+		{% include header.html %}
 
-		<div class="container">
+		<main id="content" class="container" tabindex="-1">
 		{{ content }}
-		</div>
+		</main>
 		
 		<!-- Footer -->
 		{% include_cached footer.html %}

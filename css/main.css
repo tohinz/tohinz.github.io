@@ -1,5 +1,3 @@
-@import url(font-awesome.min.css);
-@import url(https://fonts.googleapis.com/css?family=Raleway:400,700);
 
 /*
 	Spatial by TEMPLATED
@@ -1596,7 +1594,7 @@
 		@media screen and (max-width: 980px) {
 
 			body {
-				padding-top: 2em;
+				padding-top: calc(44px + 2em);
 			}
 
 		}
@@ -1668,7 +1666,7 @@
 
 	a {
 		text-decoration: underline;
-		color: #f32853;
+		color: #d91e48;
 	}
 
 		a:hover {
@@ -2291,6 +2289,27 @@
 
 /* Icon */
 
+	/* Inline SVG icons (Font Awesome 5 Free brand icons, CC BY 4.0) used in the header */
+	svg:not(:root).svg-inline--fa {
+		overflow: visible;
+	}
+
+	.svg-inline--fa {
+		display: inline-block;
+		font-size: inherit;
+		height: 1em;
+		overflow: visible;
+		vertical-align: -0.125em;
+	}
+
+		.svg-inline--fa.fa-w-14 {
+			width: 0.875em;
+		}
+
+		.svg-inline--fa.fa-w-16 {
+			width: 1em;
+		}
+
 	.icon {
 		text-decoration: none;
 		border-bottom: none;
@@ -2611,11 +2630,11 @@
 		margin: 0 0 6em 0;
 	}
 
-		header.major h2 {
+		header.major h1, header.major h2 {
 			font-size: 3em;
 		}
 
-		header.major h2, header.major h3, header.major h4, header.major h5, header.major h6 {
+		header.major h1, header.major h2, header.major h3, header.major h4, header.major h5, header.major h6 {
 			display: inline-block;
 			margin: 0 0 0.8em;
 		}
@@ -2631,7 +2650,7 @@
 			margin-bottom: 4em;
 		}
 
-			header.major h2 {
+			header.major h1, header.major h2 {
 				font-size: 2.5em;
 			}
 
@@ -2643,7 +2662,7 @@
 
 	@media screen and (max-width: 980px) {
 
-		header.major h2 {
+		header.major h1, header.major h2 {
 			font-size: 2em;
 		}
 
@@ -2663,7 +2682,7 @@
 
 	@media screen and (max-width: 480px) {
 
-		header.major h2 {
+		header.major h1, header.major h2 {
 			font-size: 1.75em;
 		}
 
@@ -2954,47 +2973,57 @@
 
 /* Menu */
 
-	.navPanelToggle {
-		text-decoration: none;
-		text-decoration: none;
-		height: 100%;
-		left: 0;
-		position: absolute;
-		top: 0;
-		width: 100%;
+	/* Mobile title bar (replaces #header, which is hidden at <= 980px) */
+	#titleBar {
 		display: none;
 	}
 
-		.navPanelToggle:before {
-			-moz-osx-font-smoothing: grayscale;
-			-webkit-font-smoothing: antialiased;
-			font-family: FontAwesome;
-			font-style: normal;
-			font-weight: normal;
-			text-transform: none !important;
-		}
-
 		@media screen and (max-width: 980px) {
 
-			.navPanelToggle {
+			#titleBar {
 				display: block;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 44px;
+				line-height: 44px;
+				background-color: #fff;
+				border-bottom: solid 1px rgba(144, 144, 144, 0.25);
+				box-shadow: 0px 0.0375em 0.125em 0px rgba(0, 0, 0, 0.05);
+				text-align: center;
+				z-index: 10001;
 			}
 
-		}
+				#titleBar .title {
+					color: #484848;
+					font-weight: 700;
+					letter-spacing: 0.05em;
+					text-decoration: none;
+					text-transform: uppercase;
+				}
 
-		.navPanelToggle *:before {
-			background: rgba(144, 144, 144, 0.65);
-			border-radius: 4px;
-			color: #fff;
-			display: block;
-			font-size: 16px;
-			height: 2.25em;
-			left: 0.5em;
-			line-height: 2.25em;
-			position: absolute;
-			text-align: center;
-			top: 0.5em;
-			width: 3.5em;
+				#titleBar .toggle {
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 60px;
+					height: 44px;
+					color: #484848;
+					text-decoration: none;
+					-webkit-tap-highlight-color: transparent;
+				}
+
+					#titleBar .toggle:before {
+						-moz-osx-font-smoothing: grayscale;
+						-webkit-font-smoothing: antialiased;
+						font-family: FontAwesome;
+						font-style: normal;
+						font-weight: normal;
+						content: '\f0c9';
+						font-size: 1.25em;
+					}
+
 		}
 
 	#navPanel {
@@ -3019,7 +3048,24 @@
 		width: 20em;
 		padding: 0.5em 1.25em;
 		text-transform: uppercase;
+		z-index: 10002;
 	}
+
+		#navPanel nav {
+			margin-top: 3.5em;
+		}
+
+		#navPanel ul.icons {
+			margin-top: 1.5em;
+		}
+
+			#navPanel ul.icons li a:not(.button) {
+				border-top: 0;
+				color: #fff;
+				display: inline-block;
+				font-size: 1.5em;
+				padding: 0;
+			}
 
 		#navPanel ul {
 			list-style: none;
@@ -3056,7 +3102,7 @@
 			transition: color 0.2s ease-in-out;
 			-webkit-tap-highlight-color: transparent;
 			border: 0;
-			color: #484848;
+			color: #fff;
 			cursor: pointer;
 			display: block;
 			height: 4em;
@@ -3092,6 +3138,12 @@
 
 			#navPanel .close:hover {
 				color: inherit;
+			}
+
+			#navPanel .close,
+			#navPanel .close:hover {
+				opacity: 1;
+				text-shadow: none;
 			}
 
 			@media screen and (max-width: 736px) {
@@ -3214,7 +3266,7 @@
 	#footer {
 		padding: 8em 0 6em 0;
 		background: #ffffff;
-		color: #aaa;
+		color: #767676;
 		text-align: center;
 	}
 
@@ -3223,12 +3275,12 @@
 			-webkit-transition: color 0.2s ease-in-out;
 			-ms-transition: color 0.2s ease-in-out;
 			transition: color 0.2s ease-in-out;
-			color: #aaa;
+			color: #767676;
 			text-decoration: none;
 		}
 
 			#footer a:active, #footer a:hover {
-				color: #666;
+				color: #484848;
 			}
 
 		#footer .icons {
@@ -3296,4 +3348,166 @@
 					padding: 0;
 				}
 
+		}
+
+/* Features grid (home page, moved from an inline <style> in index.html) */
+
+	.features-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2rem;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 1rem;
+	}
+
+	.feature-card {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		padding: 1.5rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 8px;
+	}
+
+	.feature-image {
+		flex-shrink: 0;
+		width: 150px;
+		height: 150px;
+		object-fit: cover;
+		border-radius: 4px;
+	}
+
+	.feature-content {
+		flex-grow: 1;
+	}
+
+	.feature-content a {
+		font-size: 1.1rem;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	.feature-content .date {
+		font-weight: bold;
+		margin: 0.5rem 0;
+	}
+
+	.feature-content .description {
+		font-size: 0.9rem;
+		line-height: 1.4;
+	}
+
+	@media (max-width: 768px) {
+		.features-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.feature-card {
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.feature-image {
+			width: 120px;
+			height: 120px;
+		}
+	}
+
+/* Accessibility helpers (heading levels changed for a correct outline; sizes kept identical) */
+
+	/* Publication / blog entry titles: semantic h2/h3 that look like the former h4 */
+	.pub-title {
+		font-size: 1.1em;
+		line-height: 1.5em;
+	}
+
+	header .pub-title + p {
+		font-size: 0.9em;
+		margin-top: -0.6em;
+		line-height: 1.5em;
+	}
+
+	/* Blog post title: semantic h1 that looks like the former h2 */
+	.post-title {
+		font-size: 1.75em;
+		line-height: 1.5em;
+	}
+
+	header .post-title + p {
+		font-size: 1.25em;
+		margin-top: -1em;
+		line-height: 1.5em;
+	}
+
+	/* Blog post body: headings were shifted down one level, so each keeps the size of its former level */
+	.post-body {
+		text-align: justify;
+	}
+
+		.post-body h2 { font-size: 2em; }
+		.post-body h3 { font-size: 1.75em; }
+		.post-body h4 { font-size: 1.35em; }
+		.post-body h5 { font-size: 1.1em; }
+		.post-body h6 { font-size: 0.9em; }
+
+	/* Skip link: hidden until focused with the keyboard */
+	.skip-link {
+		position: absolute;
+		left: -10000px;
+		top: auto;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
+		.skip-link:focus {
+			position: fixed;
+			left: 1em;
+			top: 1em;
+			width: auto;
+			height: auto;
+			padding: 0.5em 1em;
+			background: #fff;
+			color: #484848;
+			border: solid 2px #484848;
+			z-index: 10003;
+		}
+
+	#content:focus {
+		outline: none;
+	}
+
+	/* Buttons: darker blue for readable contrast (WCAG AA) */
+	.btn-primary {
+		background-color: #0069d9;
+		border-color: #0062cc;
+	}
+
+		.btn-primary:hover,
+		.btn-primary:focus {
+			background-color: #0056b3;
+			border-color: #004c9e;
+		}
+
+/* Grid rows on the home page / blog list were <ul> elements; they are now <div>s (valid markup).
+   These rules reproduce the spacing the old list styles gave them, so the layout is unchanged. */
+	#overview .row,
+	#publications .row,
+	#blog .row {
+		padding-left: 1em;
+	}
+
+	#publications .btn-group {
+		padding-left: 1em;
+	}
+
+	/* News list: same position as before it was wrapped in a proper <ul> */
+	ul.news-list {
+		margin: 2em 0 0 0;
+		padding-left: 0;
+	}
+
+		ul.news-list li {
+			padding-left: 0;
 		}

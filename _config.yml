@@ -1,17 +1,33 @@
+title: Tobias Hinz
+tagline: Research Scientist @ Meta
+description: I work with generative neural networks to model and understand the world around us.
 author:
   name: Tobias Hinz
 markdown: kramdown
 
-url: "https://tohinz.github.io"
+url: "https://www.tobiashinz.com"
 baseurl: ""
 
-# SEO Configuration - Explicitly ensure indexing
 defaults:
   - scope:
       path: ""
     values:
       layout: "default"
-      robots: "index, follow"
+      # Preview image when a page is shared (LinkedIn, Slack, X, ...); posts override this with their thumbnail.
+      image: /images/photo.jpg
+
+# Source files kept in the repo but not published on the site
+exclude:
+  - images/blog/SSL/two_moons.py
+  - documents/CV_Tobias_Hinz.ods
+  - vendor/
+  - node_modules/
+  - Gemfile
+  - Gemfile.lock
+
+# Share previews: post images are small/square, so use the compact card
+twitter:
+  card: summary
 
 social:
   name: Tobias Hinz
@@ -29,8 +45,6 @@ plugins:
 paginate: 5
 paginate_path: "/blog/page:num/"
 
-# Google Analytics
-google_analytics: UA-135888913-1
 
 disqus:
   shortname: https-tohinz-github-io
